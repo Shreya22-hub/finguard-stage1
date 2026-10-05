@@ -1,0 +1,102 @@
+[
+  {
+    "clause_id": "REG_FIN_001_C01",
+    "doc_id": "REG_FIN_001",
+    "doc_title": "Securities Market Conduct & Fraud Prevention Directives",
+    "regulator": "CSRC/Financial Regulator",
+    "section": "Article 3(1)",
+    "title": "Prohibition of Market Manipulation and Pump-and-Dump Schemes",
+    "text": "No entity or individual shall manipulate market prices through concerted trading, false signals, spoofing, wash sales, or spreading misleading rumors to artificially influence transaction volume or equity valuation.",
+    "category_hint": "Market Manipulation & Fraud"
+  },
+  {
+    "clause_id": "REG_FIN_001_C02",
+    "doc_id": "REG_FIN_001",
+    "doc_title": "Securities Market Conduct & Fraud Prevention Directives",
+    "regulator": "CSRC/Financial Regulator",
+    "section": "Article 5(2)",
+    "title": "Prohibition of Front-Running and Order Anticipation",
+    "text": "Market intermediaries, asset management personnel, and brokers are strictly prohibited from trading ahead of pending client orders or institutional bulk purchases for personal gain or related party benefit.",
+    "category_hint": "Market Manipulation & Fraud"
+  },
+  {
+    "clause_id": "REG_FIN_002_C01",
+    "doc_id": "REG_FIN_002",
+    "doc_title": "Insider Information & Material Non-Public Disclosure Rules",
+    "regulator": "CSRC/Financial Regulator",
+    "section": "Regulation 4(1)",
+    "title": "Prohibition of Insider Trading on Material Non-Public Information",
+    "text": "Insiders, corporate officers, auditors, and temporary tippees possessing material non-public information (MNPI) regarding earnings, mergers, or restructuring shall not trade, recommend transactions, or disclose MNPI to unauthorized third parties prior to public announcement.",
+    "category_hint": "Insider Trading & UPSI"
+  },
+  {
+    "clause_id": "REG_FIN_002_C02",
+    "doc_id": "REG_FIN_002",
+    "doc_title": "Insider Information & Material Non-Public Disclosure Rules",
+    "regulator": "CSRC/Financial Regulator",
+    "section": "Regulation 7(3)",
+    "title": "Pre-Clearance and Trading Window Closure",
+    "text": "Designated persons shall observe trading window closures prior to financial results declaration and obtain mandatory pre-clearance for equity transactions exceeding prescribed financial thresholds.",
+    "category_hint": "Insider Trading & UPSI"
+  },
+  {
+    "clause_id": "REG_FIN_003_C01",
+    "doc_id": "REG_FIN_003",
+    "doc_title": "Financial Investment Advisory & License Compliance Directives",
+    "regulator": "CSRC/Financial Regulator",
+    "section": "Clause 8(A)",
+    "title": "Mandatory Registration for Investment Advice",
+    "text": "Providing personalized stock recommendations, target price guarantees, or portfolio management advice to the public without valid regulatory license registration is unlawful.",
+    "category_hint": "Unlicensed Advisory & Finfluencers"
+  },
+  {
+    "clause_id": "REG_FIN_003_C02",
+    "doc_id": "REG_FIN_003",
+    "doc_title": "Financial Investment Advisory & License Compliance Directives",
+    "regulator": "CSRC/Financial Regulator",
+    "section": "Clause 12(B)",
+    "title": "Prohibition of Profit Sharing and Guaranteed Returns",
+    "text": "Regulated advisory entities and independent financial analysts shall not offer guaranteed return schemes, profit-sharing arrangements, or assurance of capital protection to retail investors.",
+    "category_hint": "Unlicensed Advisory & Finfluencers"
+  },
+  {
+    "clause_id": "REG_FIN_004_C01",
+    "doc_id": "REG_FIN_004",
+    "doc_title": "Anti-Money Laundering (AML) & Know Your Customer (KYC) Norms",
+    "regulator": "FIU / Financial Regulator",
+    "section": "Section 12(1)",
+    "title": "Customer Due Diligence and Beneficial Ownership Verification",
+    "text": "Financial institutions must perform comprehensive Customer Due Diligence (CDD), verify ultimate beneficial ownership (UBO), and refrain from opening anonymous accounts or accounts under fictitious names.",
+    "category_hint": "AML / KYC Compliance"
+  },
+  {
+    "clause_id": "REG_FIN_004_C02",
+    "doc_id": "REG_FIN_004",
+    "doc_title": "Anti-Money Laundering (AML) & Know Your Customer (KYC) Norms",
+    "regulator": "FIU / Financial Regulator",
+    "section": "Section 15(4)",
+    "title": "Suspicious Transaction Reporting (STR) Timelines",
+    "text": "Intermediaries must file Suspicious Transaction Reports (STR) with the financial intelligence authority within 7 working days of detecting transactions involving structured deposits, shell entities, or unexplained fund flows.",
+    "category_hint": "AML / KYC Compliance"
+  },
+  {
+    "clause_id": "REG_FIN_005_C01",
+    "doc_id": "REG_FIN_005",
+    "doc_title": "Algorithmic Trading & High-Frequency Risk Controls",
+    "regulator": "CSRC/Financial Regulator",
+    "section": "Directive 19(2)",
+    "title": "Pre-Trade Risk Controls and Kill-Switch Requirements",
+    "text": "All algorithmic trading strategies must incorporate pre-trade risk controls including order limits, price checks, order-to-trade ratio limits, and automated kill-switch functionality to prevent runaway execution.",
+    "category_hint": "Algorithmic & HFT Controls"
+  },
+  {
+    "clause_id": "REG_FIN_006_C01",
+    "doc_id": "REG_FIN_006",
+    "doc_title": "Corporate Disclosure & Material Event Notification Rules",
+    "regulator": "CSRC/Financial Regulator",
+    "section": "Section 30(2)",
+    "title": "Timely Disclosure of Material Events",
+    "text": "Listed companies must disclose material events including acquisitions, key executive resignations, litigation, or major debt defaults within 12 to 24 hours of occurrence to stock exchanges.",
+    "category_hint": "Corporate Disclosures"
+  }
+]
