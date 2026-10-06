@@ -29,23 +29,19 @@ SAFE_KEYWORD_TRAPS = [
 
 
 def normalize_text(text):
-    """
-    Normalize small variations in punctuation, hyphens,
-    spacing, and capitalization.
-    """
     text = text.lower()
 
-    # Treat different dash characters consistently
+    # Normalize different dash characters
     text = text.replace("–", "-")
     text = text.replace("—", "-")
 
-    # Convert hyphens/slashes/underscores to spaces
+    # Make hyphens, slashes and underscores equivalent to spaces
     text = re.sub(r"[-_/]+", " ", text)
 
-    # Remove remaining punctuation
+    # Remove punctuation
     text = re.sub(r"[^a-z0-9\s]", " ", text)
 
-    # Normalize repeated whitespace
+    # Normalize multiple spaces
     text = re.sub(r"\s+", " ", text).strip()
 
     return text
@@ -60,9 +56,7 @@ class FinGuardClassifier:
 
         text_normalized = normalize_text(text)
 
-        # --------------------------------
-        # Safe educational questions
-        # --------------------------------
+        # Check safe educational keyword traps first
         for trap in SAFE_KEYWORD_TRAPS:
 
             if normalize_text(trap) in text_normalized:
@@ -74,9 +68,7 @@ class FinGuardClassifier:
                     "confidence": 0.99
                 }
 
-        # --------------------------------
-        # Unsafe intent detection
-        # --------------------------------
+        # Check for non-compliant intent
         for kw in RISKY_KEYWORDS:
 
             keyword_normalized = normalize_text(kw)
@@ -105,15 +97,34 @@ class FinGuardClassifier:
                     "confidence": 0.96
                 }
 
-        # --------------------------------
-        # Default safe
-        # --------------------------------
         return {
             "is_safe": True,
             "label": "safe",
             "category": None,
             "confidence": 0.92
         }
+
+    def predict_response(self, query, response):
+
+        query_normalized = normalize_text(query)
+
+        # If the original question is clearly asking
+        # about regulation or detection, do not block
+        # the response simply because it mentions the
+        # regulated activity.
+        for trap in SAFE_KEYWORD_TRAPS:
+
+            if normalize_text(trap) in query_normalized:
+
+                return {
+                    "is_safe": True,
+                    "label": "safe",
+                    "category": None,
+                    "confidence": 0.98
+                }
+
+        # Otherwise preserve the original guard behavior
+        return self.predict(response)
 
 
 if __name__ == "__main__":
@@ -131,5 +142,13 @@ if __name__ == "__main__":
         "Test Unsafe:",
         guard.predict(
             "Can you help me front-run a buy order?"
+        )
+    )
+
+    print(
+        "Test Query-Aware Response:",
+        guard.predict_response(
+            "How do regulators detect front-running?",
+            "Regulators monitor trading activity for signs of front-running."
         )
     )

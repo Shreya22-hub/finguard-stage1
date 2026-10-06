@@ -34,10 +34,7 @@ class FinGuardPipeline:
             synthesized_response = "General financial inquiries must adhere to established market disclosure guidelines."
 
         # Checkpoint 2: Response Guard
-        response_verdict = self.guard.predict_response(
-            user_query,
-            synthesized_response
-        )
+        response_verdict = self.guard.predict(synthesized_response)
         latency_ms = (time.time() - start_time) * 1000
 
         if not response_verdict["is_safe"]:
