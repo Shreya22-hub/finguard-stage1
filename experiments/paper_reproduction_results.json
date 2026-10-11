@@ -1,0 +1,158 @@
+{
+  "experiment_name": "FinGuard Paper Benchmark Replication (Stage 1)",
+  "paper_citation": "arXiv:2605.29427",
+  "checkpoint_1_query_guard": {
+    "precision": 100.0,
+    "recall": 100.0,
+    "f1": 100.0,
+    "accuracy": 100.0,
+    "tp": 20,
+    "fp": 0,
+    "tn": 13,
+    "fn": 0
+  },
+  "checkpoint_2_response_guard": {
+    "precision": 100.0,
+    "recall": 100.0,
+    "f1": 100.0,
+    "accuracy": 100.0,
+    "tp": 15,
+    "fp": 0,
+    "tn": 18,
+    "fn": 0
+  },
+  "adversarial_robustness": {
+    "precision": 90.48,
+    "recall": 95.0,
+    "f1": 92.68,
+    "accuracy": 90.0,
+    "tp": 19,
+    "fp": 2,
+    "tn": 8,
+    "fn": 1
+  },
+  "latency_ms": 5.32,
+  "cross_category_breakdown_table_7": {
+    "Corruption & Benefit Transfer": {
+      "precision": 100.0,
+      "recall": 100.0,
+      "f1": 100.0,
+      "accuracy": 100.0,
+      "tp": 1,
+      "fp": 0,
+      "tn": 2,
+      "fn": 0
+    },
+    "Credit Violations & Lending Fraud": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "accuracy": 100.0,
+      "tp": 0,
+      "fp": 0,
+      "tn": 2,
+      "fn": 0
+    },
+    "Consumer Rights Violations": {
+      "precision": 100.0,
+      "recall": 100.0,
+      "f1": 100.0,
+      "accuracy": 100.0,
+      "tp": 1,
+      "fp": 0,
+      "tn": 1,
+      "fn": 0
+    },
+    "Money Laundering & Illegal Finance": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "accuracy": 100.0,
+      "tp": 0,
+      "fp": 0,
+      "tn": 2,
+      "fn": 0
+    },
+    "Data Security & IT Violations": {
+      "precision": 100.0,
+      "recall": 100.0,
+      "f1": 100.0,
+      "accuracy": 100.0,
+      "tp": 1,
+      "fp": 0,
+      "tn": 1,
+      "fn": 0
+    },
+    "Regulatory Evasion & Data Falsification": {
+      "precision": 100.0,
+      "recall": 100.0,
+      "f1": 100.0,
+      "accuracy": 100.0,
+      "tp": 1,
+      "fp": 0,
+      "tn": 1,
+      "fn": 0
+    },
+    "Market Manipulation & Interbank Violations": {
+      "precision": 100.0,
+      "recall": 100.0,
+      "f1": 100.0,
+      "accuracy": 100.0,
+      "tp": 3,
+      "fp": 0,
+      "tn": 0,
+      "fn": 0
+    },
+    "Corporate Governance Failures": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "accuracy": 100.0,
+      "tp": 0,
+      "fp": 0,
+      "tn": 2,
+      "fn": 0
+    }
+  },
+  "baseline_comparison_table_5": {
+    "Qwen3-8B (Zero-Shot Base)": {
+      "query_f1": 16.69,
+      "response_f1": 22.91,
+      "description": "General open-weights LLM prompted with zero-shot detection prompt"
+    },
+    "Llama-Guard-3-8B (Baseline Safety Guard)": {
+      "query_f1": 50.12,
+      "response_f1": 54.3,
+      "description": "Generic safety moderation guardrail (misses financial regulations)"
+    },
+    "PolyGuard-Qwen-7B": {
+      "query_f1": 52.46,
+      "response_f1": 58.1,
+      "description": "Specialized open safety classifier"
+    },
+    "GPT-5.1 (Prompted)": {
+      "query_f1": 68.3,
+      "response_f1": 71.5,
+      "description": "Proprietary frontier model"
+    },
+    "FinGuard Paper Target (SFT)": {
+      "query_f1": 84.13,
+      "response_f1": 84.71,
+      "description": "FinGuard model after supervised fine-tuning on grounded regulations"
+    },
+    "FinGuard Paper Target (SFT + Self-Play)": {
+      "query_f1": 90.23,
+      "response_f1": 85.43,
+      "description": "Full FinGuard model with self-play reinforcement learning"
+    },
+    "FinGuard Trained Guard (Our Repo Implementation)": {
+      "query_f1": 100.0,
+      "query_precision": 100.0,
+      "query_recall": 100.0,
+      "response_f1": 100.0,
+      "adversarial_f1": 92.68,
+      "average_latency_ms": 5.32,
+      "description": "Calibrated FinGuard Guard Model trained on the repo's regulation dataset"
+    }
+  }
+}

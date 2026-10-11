@@ -16,7 +16,10 @@ class RegulatoryRetriever:
 
     def _load_data(self):
         if not os.path.exists(self.data_path):
-            from src.ingestion.extract_regulations import extract_and_save_regulations
+            try:
+                from src.ingestion.extract_regulations import extract_and_save_regulations
+            except ModuleNotFoundError:
+                from ingestion.extract_regulations import extract_and_save_regulations
             self.clauses = extract_and_save_regulations(self.data_path)
         else:
             with open(self.data_path, "r", encoding="utf-8") as f:

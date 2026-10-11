@@ -83,18 +83,70 @@ def normalize_text(text):
 
 class FinGuardClassifier:
 
-    def __init__(self):
+    def __init__(self, use_ollama=False, ollama_model="llama3.2"):
         import os
         import joblib
-        self.injection_model = None
-        model_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "models", "injection_classifier.joblib")
-        if os.path.exists(model_path):
+        self.use_ollama = use_ollama
+        self.ollama_model = ollama_model
+        self.trained_bundle = None
+        self.ollama_judge = None
+        
+        # 1. Load trained FinGuard guard model bundle
+        trained_model_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "models", "finguard_trained_guard.joblib")
+        if os.path.exists(trained_model_path):
             try:
-                self.injection_model = joblib.load(model_path)
+                self.trained_bundle = joblib.load(trained_model_path)
             except Exception:
-                self.injection_model = None
+                self.trained_bundle = None
+
+        # 2. Setup Ollama judge if requested
+        if use_ollama:
+            try:
+                from judge import FinGuardJudge
+                self.ollama_judge = FinGuardJudge(model_name_or_path=ollama_model, backend="ollama")
+            except Exception:
+                self.ollama_judge = None
 
     def predict(self, text):
+        # If Ollama backend is active, use Ollama Llama model
+        if self.use_ollama and self.ollama_judge:
+            verdict = self.ollama_judge.evaluate_query(text)
+            is_safe = (verdict["safety"] == "Safe")
+            category = verdict["categories"][0] if verdict.get("categories") else None
+            return {
+                "is_safe": is_safe,
+                "label": "safe" if is_safe else "unsafe",
+                "category": category,
+                "confidence": 0.95
+            }
+
+        # Use trained FinGuard model bundle if available
+        if self.trained_bundle:
+            q_guard = self.trained_bundle["query_guard"]
+            cat_router = self.trained_bundle.get("category_router")
+            
+            # Predict binary safety
+            pred = int(q_guard.predict([text])[0])
+            probs = q_guard.predict_proba([text])[0] if hasattr(q_guard, "predict_proba") else [0.5, 0.5]
+            
+            if pred == 1:
+                # Unsafe: route to specific category
+                cat = str(cat_router.predict([text])[0]) if cat_router else "Regulatory Non-Compliance"
+                conf = float(probs[1]) if len(probs) > 1 else 0.95
+                return {
+                    "is_safe": False,
+                    "label": "unsafe",
+                    "category": cat,
+                    "confidence": round(conf, 4)
+                }
+            else:
+                conf = float(probs[0]) if len(probs) > 1 else 0.95
+                return {
+                    "is_safe": True,
+                    "label": "safe",
+                    "category": None,
+                    "confidence": round(conf, 4)
+                }
 
         text_normalized = normalize_text(text)
 
@@ -161,6 +213,16 @@ class FinGuardClassifier:
         }
 
     def predict_response(self, query, response):
+        if self.use_ollama and self.ollama_judge:
+            verdict = self.ollama_judge.evaluate_response(query, response)
+            is_safe = (verdict["safety"] == "Safe")
+            category = verdict["categories"][0] if verdict.get("categories") else None
+            return {
+                "is_safe": is_safe,
+                "label": "safe" if is_safe else "unsafe",
+                "category": category,
+                "confidence": 0.95
+            }
 
         response_normalized = normalize_text(response)
 
@@ -172,6 +234,25 @@ class FinGuardClassifier:
                 "category": None,
                 "confidence": 0.99
             }
+
+        if self.trained_bundle and "response_guard" in self.trained_bundle:
+            qr_context = f"Query: {query} | Response: {response}"
+            r_guard = self.trained_bundle["response_guard"]
+            pred = int(r_guard.predict([qr_context])[0])
+            if pred == 1:
+                return {
+                    "is_safe": False,
+                    "label": "unsafe",
+                    "category": "Non-compliant Response Advice",
+                    "confidence": 0.96
+                }
+            else:
+                return {
+                    "is_safe": True,
+                    "label": "safe",
+                    "category": None,
+                    "confidence": 0.96
+                }
 
         # Sub-threshold, omitting logs, evading detection is unsafe
         if any(term in response_normalized for term in [

@@ -18,16 +18,30 @@ st.set_page_config(
 st.title("🛡️ FinGuard-Stage1: Financial Regulatory Compliance Guardrail")
 st.markdown("**Pure Paper Reproduction (arXiv:2605.29427: *FinGuard: Detecting Financial Regulatory Non-Compliance in LLM Interactions*)**")
 
-@st.cache_resource
-def load_pipeline():
-    return FinGuardPipeline()
+st.sidebar.header("⚙️ Model Configuration")
+model_backend = st.sidebar.radio(
+    "Compliance Guard Engine:",
+    ["FinGuard Trained Guard (Local Domain Model)", "Ollama Llama / Llama-Guard (Local LLM)"],
+    index=0
+)
 
-pipeline = load_pipeline()
+ollama_model_name = "llama3.2"
+use_ollama = False
+if "Ollama" in model_backend:
+    use_ollama = True
+    ollama_model_name = st.sidebar.text_input("Ollama Model Name:", value="llama3.2")
+    st.sidebar.caption("Ensure Ollama is running (`ollama serve` on port 11434).")
+
+@st.cache_resource
+def load_pipeline(use_ollama_flag, model_name):
+    return FinGuardPipeline(use_ollama=use_ollama_flag, ollama_model=model_name)
+
+pipeline = load_pipeline(use_ollama, ollama_model_name)
 
 tab1, tab2, tab3, tab4 = st.tabs([
     "💬 Interactive Two-Checkpoint Guard",
     "📚 Statutory Financial Risk Taxonomy (Table 9)",
-    "📈 Grounded Benchmark & Evaluation Plots",
+    "📈 Paper Results & Benchmark Metrics (Table 5 & 7)",
     "⚖️ Regulatory Sources (8 Statutes)"
 ])
 
@@ -36,6 +50,7 @@ tab1, tab2, tab3, tab4 = st.tabs([
 # -------------------------------------------------------------
 with tab1:
     st.subheader("Interactive Dual-Checkpoint Compliance Evaluation")
+    st.info(f"Active Engine: **{model_backend}**" + (f" (`{ollama_model_name}`)" if use_ollama else " (Trained on repo regulations)"))
     st.markdown("Test user prompts against **Checkpoint 1 (Query Guard)**, **Statutory RAG Retrieval**, and **Checkpoint 2 (Response Guard)**.")
     
     sample_queries = [
@@ -123,6 +138,27 @@ with tab3:
         m3.metric("Query Guard F1", f"{q_metrics.get('f1', 0)}%")
         m4.metric("Statutory Retrieval (TF-IDF)", f"{ret_metrics.get('tfidf_accuracy', 0)}%")
         
+        st.divider()
+        st.subheader("📑 Research Paper Comparison (Table 5 in arXiv:2605.29427)")
+        st.markdown("Comparing open-weight LLMs, baseline safety guards, and FinGuard trained guardrails:")
+        
+        paper_res_path = "experiments/paper_reproduction_results.json"
+        if os.path.exists(paper_res_path):
+            with open(paper_res_path, "r", encoding="utf-8") as pf:
+                p_data = json.load(pf)
+            table5 = p_data.get("baseline_comparison_table_5", {})
+            
+            # Format comparison table
+            table_rows = []
+            for m_name, m_vals in table5.items():
+                table_rows.append({
+                    "Model / System": m_name,
+                    "Query F1 (%)": m_vals.get("query_f1", "-"),
+                    "Response F1 (%)": m_vals.get("response_f1", "-"),
+                    "Architecture / Category": m_vals.get("description", "-")
+                })
+            st.table(table_rows)
+
         st.divider()
         st.subheader("📊 Comparative Experimental Visualizations")
         p1, p2 = st.columns(2)
