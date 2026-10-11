@@ -84,7 +84,15 @@ def normalize_text(text):
 class FinGuardClassifier:
 
     def __init__(self):
-        pass
+        import os
+        import joblib
+        self.injection_model = None
+        model_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "models", "injection_classifier.joblib")
+        if os.path.exists(model_path):
+            try:
+                self.injection_model = joblib.load(model_path)
+            except Exception:
+                self.injection_model = None
 
     def predict(self, text):
 
@@ -129,6 +137,21 @@ class FinGuardClassifier:
                     "category": category,
                     "confidence": 0.96
                 }
+
+        # ML Model check on prompt injection & financial attacks
+        if self.injection_model is not None:
+            try:
+                pred = self.injection_model.predict([text])[0]
+                proba = self.injection_model.predict_proba([text])[0][1]
+                if pred == 1 and proba >= 0.70:
+                    return {
+                        "is_safe": False,
+                        "label": "unsafe",
+                        "category": "Prompt Injection / Financial Attack",
+                        "confidence": round(float(proba), 3)
+                    }
+            except Exception:
+                pass
 
         return {
             "is_safe": True,
