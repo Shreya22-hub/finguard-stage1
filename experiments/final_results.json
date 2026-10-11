@@ -1,0 +1,75 @@
+{
+  "project": "FinGuard Stage 1",
+  "evaluation_summary": {
+    "test_samples": 15,
+    "query_level": {
+      "precision": 100.0,
+      "recall": 84.62,
+      "f1": 91.67,
+      "accuracy": 86.67,
+      "true_positives": 11,
+      "false_positives": 0,
+      "true_negatives": 2,
+      "false_negatives": 2
+    },
+    "response_level": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "accuracy": 50.0,
+      "true_positives": 0,
+      "false_positives": 0,
+      "true_negatives": 2,
+      "false_negatives": 2,
+      "samples_evaluated": 4
+    },
+    "adversarial": {
+      "precision": 75.0,
+      "recall": 60.0,
+      "f1": 66.67,
+      "accuracy": 60.0,
+      "true_positives": 12,
+      "false_positives": 4,
+      "true_negatives": 6,
+      "false_negatives": 8
+    },
+    "retrieval": {
+      "top_k": 2,
+      "test_cases": 15,
+      "jaccard": {
+        "hits": 12,
+        "accuracy": 80.0
+      },
+      "tfidf": {
+        "hits": 15,
+        "accuracy": 100.0
+      },
+      "improvement_percentage_points": 20.0
+    },
+    "latency": {
+      "average_pipeline_latency_ms": 0.2
+    }
+  },
+  "experiments": [
+    {
+      "name": "Query and response level evaluation",
+      "commit": "4b22893"
+    },
+    {
+      "name": "Compliance keyword normalization",
+      "commit": "9fb78b2"
+    },
+    {
+      "name": "Adversarial robustness evaluation",
+      "commit": "3aa5be3"
+    },
+    {
+      "name": "Query-aware response guard",
+      "commit": "dc41d2a"
+    },
+    {
+      "name": "TF-IDF retrieval",
+      "commit": "3e9c529"
+    }
+  ]
+}

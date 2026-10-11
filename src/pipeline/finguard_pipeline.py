@@ -1,10 +1,20 @@
+import os
+import sys
 import time
-from src.guard.compliance_guard import FinGuardClassifier
-from src.retrieval.retriever import RegulatoryRetriever
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+
+try:
+    from src.guard.compliance_guard import FinGuardClassifier
+    from src.retrieval.retriever import RegulatoryRetriever
+except ModuleNotFoundError:
+    from guard.compliance_guard import FinGuardClassifier
+    from retrieval.retriever import RegulatoryRetriever
 
 class FinGuardPipeline:
-    def __init__(self):
-        self.guard = FinGuardClassifier()
+    def __init__(self, use_ollama=False, ollama_model="llama3.2"):
+        self.guard = FinGuardClassifier(use_ollama=use_ollama, ollama_model=ollama_model)
         self.retriever = RegulatoryRetriever()
 
     def process_query(self, user_query):
@@ -34,7 +44,10 @@ class FinGuardPipeline:
             synthesized_response = "General financial inquiries must adhere to established market disclosure guidelines."
 
         # Checkpoint 2: Response Guard
-        response_verdict = self.guard.predict(synthesized_response)
+        response_verdict = self.guard.predict_response(
+            user_query,
+            synthesized_response
+        )
         latency_ms = (time.time() - start_time) * 1000
 
         if not response_verdict["is_safe"]:

@@ -1,0 +1,15 @@
+{
+  "dataset": "nandhak12/finguard-finance-injection-dataset",
+  "train_samples": 10699,
+  "test_samples": 3047,
+  "metrics": {
+    "accuracy": 99.47,
+    "precision": 99.71,
+    "recall": 98.75,
+    "f1": 99.23,
+    "true_positives": 1028,
+    "false_positives": 3,
+    "true_negatives": 2003,
+    "false_negatives": 13
+  }
+}
