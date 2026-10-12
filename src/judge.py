@@ -9,8 +9,16 @@ Parses predictions according to paper output specification:
 import os
 import re
 from typing import Dict, Any, Optional, List
-from prompts import QUERY_DETECTION_PROMPT, RESPONSE_DETECTION_PROMPT
-from taxonomy import format_taxonomy_text
+try:
+    from .prompts import QUERY_DETECTION_PROMPT, RESPONSE_DETECTION_PROMPT
+    from .taxonomy import format_taxonomy_text
+except ImportError:
+    try:
+        from src.prompts import QUERY_DETECTION_PROMPT, RESPONSE_DETECTION_PROMPT
+        from src.taxonomy import format_taxonomy_text
+    except ImportError:
+        from prompts import QUERY_DETECTION_PROMPT, RESPONSE_DETECTION_PROMPT
+        from taxonomy import format_taxonomy_text
 
 class FinGuardJudge:
     def __init__(
