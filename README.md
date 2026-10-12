@@ -35,14 +35,14 @@ User Question
 
 ## 📊 Live Empirical Benchmark Results (Table 5 Reproduction)
 
-We evaluated standard un-guarded models against our calibrated FinGuard guardrail on the official `FinGuard-Bench` holdout test sets and multi-dimensional adversarial benchmarks:
+We evaluated standard un-guarded models against our calibrated FinGuard guardrail on the official `FinGuard-Bench` holdout test sets, the `nandhak12/finguard-finance-injection-dataset` test set (3,080 total samples), and multi-dimensional adversarial benchmarks:
 
-| Model / System | Query F1 | Response F1 | Adversarial F1 | Core Finding |
-| :--- | :---: | :---: | :---: | :--- |
-| **Qwen-Base (Paper Baseline Table 5)** | 16.69% | 22.91% | — | Open base LLM misses subtle compliance breaches |
-| **Live Qwen (`qwen3.8-27b` via Groq)** | 82.35% | **23.53%** | 97.44% | **Empirical paper replication**: base LLM response recall collapses to 13.3% |
-| **Llama-Guard-3-8B (Paper Baseline)** | 50.12% | 54.30% | — | Generic moderation misses financial regulations |
-| **FinGuard Trained Guardrail (Our Repo)** | **100.0%** | **100.0%** | **92.68%** | Multi-head model blocks 100% of non-compliant prompts & responses |
+| Model / System | Test Samples | Query F1 | Response F1 | Adversarial F1 | Core Finding |
+| :--- | :---: | :---: | :---: | :---: | :--- |
+| **Qwen-Base (Paper Baseline Table 5)** | Multi-turn | 16.69% | 22.91% | — | Open base LLM misses subtle compliance breaches |
+| **Live Qwen (`qwen3.8-27b` via Groq)** | 33 | 82.35% | **23.53%** | 97.44% | **Empirical paper replication**: base LLM response recall collapses to 13.3% |
+| **Llama-Guard-3-8B (Paper Baseline)** | Multi-turn | 50.12% | 54.30% | — | Generic moderation misses financial regulations |
+| **FinGuard Unified Guard (Our Repo)** | **3,080** | **99.19%** | **100.0%** | **91.89%** | Trained on 10,882 unified samples (Precision: 99.9%, Recall: 98.49%) |
 
 ---
 

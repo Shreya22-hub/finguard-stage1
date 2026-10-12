@@ -2,14 +2,14 @@
   "experiment_name": "FinGuard Paper Benchmark Replication (Stage 1)",
   "paper_citation": "arXiv:2605.29427",
   "checkpoint_1_query_guard": {
-    "precision": 100.0,
-    "recall": 100.0,
-    "f1": 100.0,
-    "accuracy": 100.0,
-    "tp": 20,
-    "fp": 0,
-    "tn": 13,
-    "fn": 0
+    "precision": 99.9,
+    "recall": 98.49,
+    "f1": 99.19,
+    "accuracy": 99.45,
+    "tp": 1045,
+    "fp": 1,
+    "tn": 2018,
+    "fn": 16
   },
   "checkpoint_2_response_guard": {
     "precision": 100.0,
@@ -22,16 +22,16 @@
     "fn": 0
   },
   "adversarial_robustness": {
-    "precision": 90.48,
-    "recall": 95.0,
-    "f1": 92.68,
+    "precision": 100.0,
+    "recall": 85.0,
+    "f1": 91.89,
     "accuracy": 90.0,
-    "tp": 19,
-    "fp": 2,
-    "tn": 8,
-    "fn": 1
+    "tp": 17,
+    "fp": 0,
+    "tn": 10,
+    "fn": 3
   },
-  "latency_ms": 4.02,
+  "latency_ms": 8.24,
   "cross_category_breakdown_table_7": {
     "Corruption & Benefit Transfer": {
       "precision": 100.0,
@@ -146,12 +146,12 @@
       "description": "Full FinGuard model with self-play reinforcement learning"
     },
     "FinGuard Trained Guard (Our Repo Implementation)": {
-      "query_f1": 100.0,
-      "query_precision": 100.0,
-      "query_recall": 100.0,
+      "query_f1": 99.19,
+      "query_precision": 99.9,
+      "query_recall": 98.49,
       "response_f1": 100.0,
-      "adversarial_f1": 92.68,
-      "average_latency_ms": 4.02,
+      "adversarial_f1": 91.89,
+      "average_latency_ms": 8.24,
       "description": "Calibrated FinGuard Guard Model trained on the repo's regulation dataset"
     }
   }
