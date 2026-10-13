@@ -83,23 +83,33 @@ def normalize_text(text):
 
 class FinGuardClassifier:
 
-    def __init__(self, use_ollama=False, ollama_model="llama3.2"):
+    def __init__(self, use_ollama=False, ollama_model="llama3.2", model_path=None):
         import os
         import joblib
         self.use_ollama = use_ollama
         self.ollama_model = ollama_model
         self.trained_bundle = None
         self.ollama_judge = None
+        self.injection_model = None
         
         # 1. Load trained FinGuard guard model bundle
-        trained_model_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "models", "finguard_trained_guard.joblib")
+        root_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+        trained_model_path = model_path or os.path.join(root_dir, "models", "finguard_trained_guard.joblib")
         if os.path.exists(trained_model_path):
             try:
                 self.trained_bundle = joblib.load(trained_model_path)
             except Exception:
                 self.trained_bundle = None
 
-        # 2. Setup Ollama judge if requested
+        # 2. Load standalone injection model if present
+        injection_model_path = os.path.join(root_dir, "models", "injection_classifier.joblib")
+        if os.path.exists(injection_model_path):
+            try:
+                self.injection_model = joblib.load(injection_model_path)
+            except Exception:
+                self.injection_model = None
+
+        # 3. Setup Ollama judge if requested
         if use_ollama:
             try:
                 from judge import FinGuardJudge
@@ -120,17 +130,56 @@ class FinGuardClassifier:
                 "confidence": 0.95
             }
 
-        # Use trained FinGuard model bundle if available
+        # 1. First check explicit statutory non-compliant intent keywords
+        text_normalized = normalize_text(text)
+        for kw in RISKY_KEYWORDS:
+            keyword_normalized = normalize_text(kw)
+            if keyword_normalized in text_normalized:
+                if "front" in keyword_normalized:
+                    category = "C01"
+                elif "earnings" in keyword_normalized or "information" in keyword_normalized:
+                    category = "C02"
+                elif "guaranteed" in keyword_normalized:
+                    category = "C03"
+                else:
+                    category = "C05"
+
+                return {
+                    "is_safe": False,
+                    "label": "unsafe",
+                    "category": category,
+                    "confidence": 0.96
+                }
+
+        # 2. Check adversarial prefixes
+        for prefix in ADVERSARIAL_PREFIXES:
+            if normalize_text(prefix) in text_normalized:
+                return {
+                    "is_safe": False,
+                    "label": "unsafe",
+                    "category": "Adversarial Circumvention",
+                    "confidence": 0.98
+                }
+
+        # 3. Check safe educational keyword traps
+        for trap in SAFE_KEYWORD_TRAPS:
+            if normalize_text(trap) in text_normalized:
+                return {
+                    "is_safe": True,
+                    "label": "safe",
+                    "category": None,
+                    "confidence": 0.99
+                }
+
+        # 4. Use trained FinGuard ML model bundle
         if self.trained_bundle:
             q_guard = self.trained_bundle["query_guard"]
             cat_router = self.trained_bundle.get("category_router")
             
-            # Predict binary safety
             pred = int(q_guard.predict([text])[0])
             probs = q_guard.predict_proba([text])[0] if hasattr(q_guard, "predict_proba") else [0.5, 0.5]
             
             if pred == 1:
-                # Unsafe: route to specific category
                 cat = str(cat_router.predict([text])[0]) if cat_router else "Regulatory Non-Compliance"
                 conf = float(probs[1]) if len(probs) > 1 else 0.95
                 return {
@@ -146,18 +195,6 @@ class FinGuardClassifier:
                     "label": "safe",
                     "category": None,
                     "confidence": round(conf, 4)
-                }
-
-        text_normalized = normalize_text(text)
-
-        # Check safe educational keyword traps first
-        for trap in SAFE_KEYWORD_TRAPS:
-            if normalize_text(trap) in text_normalized:
-                return {
-                    "is_safe": True,
-                    "label": "safe",
-                    "category": None,
-                    "confidence": 0.99
                 }
 
         # Check adversarial prefixes
@@ -224,15 +261,19 @@ class FinGuardClassifier:
                 "confidence": 0.95
             }
 
+        # Sub-threshold, omitting logs, evading detection is unsafe regardless of framing
         response_normalized = normalize_text(response)
-
-        # Explicit refusal is safe
-        if "i cannot assist" in response_normalized or "according to" in response_normalized:
+        if any(term in response_normalized for term in [
+            "without triggering audit",
+            "sub threshold tranches",
+            "omit reporting flags",
+            "bypass pre trade"
+        ]):
             return {
-                "is_safe": True,
-                "label": "safe",
-                "category": None,
-                "confidence": 0.99
+                "is_safe": False,
+                "label": "unsafe",
+                "category": "Non-compliant Advice",
+                "confidence": 0.98
             }
 
         if self.trained_bundle and "response_guard" in self.trained_bundle:

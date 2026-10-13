@@ -1,0 +1,29 @@
+{
+  "sources": {
+    "datasets/finguard_bench_real": {
+      "train": 84,
+      "validation": 18,
+      "test": 18
+    },
+    "datasets/finguard_bench": {
+      "train": 67,
+      "validation": 14,
+      "test": 15
+    },
+    "nandhak12/finguard-finance-injection-dataset": {
+      "train": 10699,
+      "test": 3047
+    }
+  },
+  "leakage_audit": {
+    "train_val_overlap": 15,
+    "train_test_overlap": 87,
+    "val_test_overlap": 9,
+    "passed": false
+  },
+  "split_counts": {
+    "train": 10850,
+    "validation": 32,
+    "test": 3080
+  }
+}

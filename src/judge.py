@@ -24,26 +24,34 @@ class FinGuardJudge:
     def __init__(
         self,
         model_name_or_path: str = "Qwen/Qwen2.5-7B-Instruct",
-        backend: str = "mock", # "mock", "hf", or "openai"
+        backend: str = "mock", # "mock", "ollama", "openai", "groq", or "hf"
         api_key: Optional[str] = None,
         base_url: Optional[str] = None,
         temperature: float = 0.0,
+        allow_mock: bool = True
     ):
         self.model_name_or_path = model_name_or_path
-        self.backend = backend
+        self.backend = backend.lower()
         self.temperature = temperature
         self.taxonomy_def = format_taxonomy_text()
+        
+        if self.backend == "mock" and not allow_mock:
+            raise ValueError(
+                "Mock backend is forbidden for evaluation runs. Please specify a real backend ('ollama', 'groq', 'openai', or 'hf')."
+            )
         
         self.base_url = base_url or os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 
         if self.backend == "ollama":
             import requests
             self.requests = requests
-        elif self.backend == "openai":
+        elif self.backend in ["openai", "groq"]:
             import openai
+            default_key = os.getenv("GROQ_API_KEY") if self.backend == "groq" else os.getenv("OPENAI_API_KEY")
+            default_url = "https://api.groq.com/openai/v1" if self.backend == "groq" else "https://api.openai.com/v1"
             self.client = openai.OpenAI(
-                api_key=api_key or os.getenv("OPENAI_API_KEY", "dummy"),
-                base_url=base_url or os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
+                api_key=api_key or default_key or "dummy",
+                base_url=base_url or default_url
             )
         elif self.backend == "hf":
             import torch
@@ -122,27 +130,45 @@ class FinGuardJudge:
         Parses output in the format:
           Safety: <Safe or Unsafe>
           Categories: <None, or comma-separated categories>
+        Fails safely: malformed outputs or empty outputs are marked as invalid and not silently defaulted to Safe.
         """
+        if not raw_output or not raw_output.strip():
+            return {
+                "safety": "Error",
+                "categories": [],
+                "raw": raw_output,
+                "is_valid_format": False,
+                "error": "Empty model output"
+            }
+
         safety = "Unknown"
         categories: List[str] = []
+        is_valid = False
         
-        # Parse Safety
+        # Parse Safety with regex
         safety_match = re.search(r"Safety:\s*(Safe|Unsafe)", raw_output, re.IGNORECASE)
         if safety_match:
-            safety = "Safe" if safety_match.group(1).lower() == "safe" else "Unsafe"
+            val = safety_match.group(1).capitalize()
+            safety = val
+            is_valid = True
             
         # Parse Categories
         cat_match = re.search(r"Categories:\s*(.+)", raw_output, re.IGNORECASE)
         if cat_match:
             cat_str = cat_match.group(1).strip()
-            if cat_str.lower() != "none":
+            # Stop if extra generation or second headers follow
+            cat_str = cat_str.split("\n")[0].strip()
+            if cat_str.lower() != "none" and cat_str.lower() != "n/a":
                 categories = [c.strip() for c in cat_str.split(",") if c.strip()]
-                
+        elif safety == "Unsafe":
+            # If marked unsafe but no categories parsed, flag category as unspecified
+            categories = ["Unspecified Violation"]
+
         return {
             "safety": safety,
             "categories": categories,
             "raw": raw_output,
-            "is_valid_format": safety in ["Safe", "Unsafe"]
+            "is_valid_format": is_valid
         }
 
     def evaluate_query(self, query: str) -> Dict[str, Any]:

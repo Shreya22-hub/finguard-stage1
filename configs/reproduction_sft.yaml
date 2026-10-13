@@ -1,0 +1,41 @@
+# FinGuard Reproduction Configuration: Supervised Fine-Tuning (SFT)
+# Captured strictly from FinGuard Paper: Huaixia Dou et al. (arXiv:2605.29427)
+
+model_name_or_path: "Qwen/Qwen2.5-7B-Instruct" # Target paper base: Qwen3-8B / Qwen2.5-7B
+stage: "sft"
+do_train: true
+finetuning_type: "lora"
+
+# LoRA Hyperparameters (Table 5 & Section 4.2 of paper)
+lora_rank: 8
+lora_alpha: 16
+lora_dropout: 0.05
+lora_target: "all-linear"
+
+# Training Strategy
+dataset: "finguard_bench_sft"
+dataset_dir: "data"
+template: "qwen"
+cutoff_len: 2048
+max_samples: 100000
+overwrite_cache: true
+preprocessing_num_workers: 16
+
+# Optimization & Batch Schedule
+output_dir: "models/finguard_qwen_sft"
+logging_steps: 10
+save_steps: 500
+plot_loss: true
+overwrite_output_dir: true
+
+per_device_train_batch_size: 4
+gradient_accumulation_steps: 2
+learning_rate: 3.0e-5
+num_train_epochs: 1.0
+lr_scheduler_type: "cosine"
+warmup_ratio: 0.1
+bf16: true
+optim: "adamw_torch"
+
+# Compute environment note:
+# Paper hardware: 8 x NVIDIA A100 80GB GPUs

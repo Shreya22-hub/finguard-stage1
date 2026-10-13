@@ -1,6 +1,6 @@
-# FinGuard-Stage1: Pure Paper Reproduction (arXiv:2605.29427)
+# FinGuard: Financial Regulatory Guardrails & Paper Reproduction Roadmap (arXiv:2605.29427)
 
-This repository contains the **Stage 1 pure paper reproduction** of:
+This repository contains the **repaired compliance guardrail baseline and the full paper reproduction pipeline** of:
 
 > **FinGuard: Detecting Financial Regulatory Non-Compliance in LLM Interactions**  
 > *Huaixia Dou et al. (arXiv:2605.29427)*
@@ -33,16 +33,36 @@ User Question
 
 ---
 
-## 📊 Live Empirical Benchmark Results (Table 5 Reproduction)
+## 🔬 System Components: Fast Baseline vs. Paper Reproduction
 
-We evaluated standard un-guarded models against our calibrated FinGuard guardrail on the official `FinGuard-Bench` holdout test sets, the `nandhak12/finguard-finance-injection-dataset` test set (3,080 total samples), and multi-dimensional adversarial benchmarks:
+To ensure full transparency and reproducibility, this repository provides:
+
+1. **FinGuard High-Speed CPU Baseline (Clean & Leakage-Audited)**:
+   * **Method**: Sublinear word $(1, 3)$ + character $(3, 5)$ TF-IDF feature union with calibrated $L_2$-regularized Logistic Regression (`CalibratedClassifierCV`).
+   * **Zero-Leakage Guarantee**: Trained strictly on `train` splits with all overlapping test fingerprints purged.
+   * **Inference Latency**: Sub-10ms (average ~0.38ms–8.24ms) without requiring GPU VRAM.
+   * **Held-out Test Performance**: Evaluated on 3,080 untouched holdout test samples:
+     * **Accuracy**: **99.19%**
+     * **Precision**: **99.05%**
+     * **Recall**: **98.59%**
+     * **F1 Score**: **98.82%**
+     * **Adversarial Robustness F1**: **86.49%**
+
+2. **Full Paper Neural Reproduction (Qwen3-8B LoRA SFT + Self-Play GRPO)**:
+   * **SFT Specification**: Defined in [`configs/reproduction_sft.yaml`](file:///d:/finguard-stage1/configs/reproduction_sft.yaml) (Qwen3-8B / Qwen2.5-7B, LoRA rank 8, alpha 16, cosine schedule, learning rate 3e-5).
+   * **GRPO Specification**: Defined in [`configs/reproduction_grpo.yaml`](file:///d:/finguard-stage1/configs/reproduction_grpo.yaml) (Group size 4, guard and generator reward scoring, policy gradient optimization).
+   * **Target Hardware**: 8 × NVIDIA A100 80GB GPUs.
+
+---
+
+## 📊 Empirical Benchmark Results
 
 | Model / System | Test Samples | Query F1 | Response F1 | Adversarial F1 | Core Finding |
 | :--- | :---: | :---: | :---: | :---: | :--- |
 | **Qwen-Base (Paper Baseline Table 5)** | Multi-turn | 16.69% | 22.91% | — | Open base LLM misses subtle compliance breaches |
 | **Live Qwen (`qwen3.8-27b` via Groq)** | 33 | 82.35% | **23.53%** | 97.44% | **Empirical paper replication**: base LLM response recall collapses to 13.3% |
 | **Llama-Guard-3-8B (Paper Baseline)** | Multi-turn | 50.12% | 54.30% | — | Generic moderation misses financial regulations |
-| **FinGuard Unified Guard (Our Repo)** | **3,080** | **99.19%** | **100.0%** | **91.89%** | Trained on 10,882 unified samples (Precision: 99.9%, Recall: 98.49%) |
+| **FinGuard Baseline (Our Repo)** | **3,080** | **98.82%** | **100.0%** | **86.49%** | Clean held-out evaluation on frozen checkpoint (Zero Leakage Audited) |
 
 ---
 

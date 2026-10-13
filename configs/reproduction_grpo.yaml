@@ -1,0 +1,35 @@
+# FinGuard Reproduction Configuration: Self-Play GRPO (Group Relative Policy Optimization)
+# Captured strictly from FinGuard Paper: Huaixia Dou et al. (arXiv:2605.29427)
+
+stage: "grpo"
+do_train: true
+model_name_or_path: "models/finguard_qwen_sft" # Initialized from SFT checkpoint
+output_dir: "models/finguard_qwen_grpo"
+
+# Self-Play Rollout & Group Sampling Parameters
+num_generations: 4           # Group size G sampled per prompt for advantage computation
+max_prompt_length: 1024
+max_completion_length: 512
+temperature: 0.7
+top_p: 0.9
+
+# GRPO Reward Mechanics
+# Guard Reward: +1 for correct verdict, 0 for incorrect, -0.5 for malformed structure
+# Generator Reward: Centered around difficulty s = 0.5; rejects s = 0 or s = 1
+reward_funcs:
+  - "guard_compliance_reward"
+  - "generator_difficulty_reward"
+  - "format_compliance_reward"
+
+# Optimization Schedule
+learning_rate: 1.0e-6
+lr_scheduler_type: "cosine"
+warmup_ratio: 0.05
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 4
+num_train_epochs: 2.0
+bf16: true
+optim: "adamw_torch"
+
+# Compute environment note:
+# Paper hardware: 8 x NVIDIA A100 80GB GPUs
