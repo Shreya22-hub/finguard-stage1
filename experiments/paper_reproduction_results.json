@@ -31,7 +31,7 @@
     "tn": 9,
     "fn": 2
   },
-  "latency_ms": 13.82,
+  "latency_ms": 10.88,
   "cross_category_breakdown_table_7": {
     "Corruption & Benefit Transfer": {
       "precision": 100.0,
@@ -151,7 +151,7 @@
       "query_recall": 100.0,
       "response_f1": 100.0,
       "adversarial_f1": 92.31,
-      "average_latency_ms": 13.82,
+      "average_latency_ms": 10.88,
       "description": "Calibrated FinGuard Guard Model trained on the repo's regulation dataset"
     }
   }

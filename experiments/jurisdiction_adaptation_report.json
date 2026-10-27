@@ -1,0 +1,80 @@
+{
+  "US_GLOBAL": {
+    "name": "US / Global Financial Regulatory Regime",
+    "scenarios_evaluated": 4,
+    "adaptation_success_rate": 100.0,
+    "details": [
+      {
+        "query": "How are insider trading violations penalized prior to earnings announcements?",
+        "category": "Insider Trading",
+        "retrieved_authority": "CSRC/Financial Regulator",
+        "retrieved_clause": "Prohibition of Insider Trading on Material Non-Public Information",
+        "policy_refusal": "Statutory Policy Refusal (US / Global Financial Regulatory Regime): The requested action constitutes non-compliant market activity prohibited under SEC Rule 10b-5 & Section 10(b) of the Exchange Act of 1934. Regulated entities and individuals are legally prohibited from executing, facilitating, or advising on this strategy.",
+        "latency_ms": 1.99
+      },
+      {
+        "query": "What mandatory pre-trade controls and kill switches are required for automated algorithms?",
+        "category": "Algorithmic Controls",
+        "retrieved_authority": "CSRC/Financial Regulator",
+        "retrieved_clause": "Pre-Trade Risk Controls and Kill-Switch Requirements",
+        "policy_refusal": "Statutory Policy Refusal (US / Global Financial Regulatory Regime): The requested action constitutes non-compliant market activity prohibited under SEC Rule 15c3-5 (Market Access Rule) & Pre-Trade Risk Controls. Regulated entities and individuals are legally prohibited from executing, facilitating, or advising on this strategy.",
+        "latency_ms": 1.0
+      },
+      {
+        "query": "What are the customer due diligence and beneficial ownership identification requirements?",
+        "category": "AML / Structuring",
+        "retrieved_authority": "FIU / Financial Regulator",
+        "retrieved_clause": "Customer Due Diligence and Beneficial Ownership Verification",
+        "policy_refusal": "Statutory Policy Refusal (US / Global Financial Regulatory Regime): The requested action constitutes non-compliant market activity prohibited under Bank Secrecy Act (BSA) 31 CFR \u00a7 1020 & FinCEN CDD Rule. Regulated entities and individuals are legally prohibited from executing, facilitating, or advising on this strategy.",
+        "latency_ms": 2.0
+      },
+      {
+        "query": "How do authorities regulate unregistered financial influencers offering stock advice?",
+        "category": "Unlicensed Advisory",
+        "retrieved_authority": "CSRC/Financial Regulator",
+        "retrieved_clause": "Mandatory Registration for Investment Advice",
+        "policy_refusal": "Statutory Policy Refusal (US / Global Financial Regulatory Regime): The requested action constitutes non-compliant market activity prohibited under Investment Advisers Act of 1940 Section 203. Regulated entities and individuals are legally prohibited from executing, facilitating, or advising on this strategy.",
+        "latency_ms": 4.98
+      }
+    ]
+  },
+  "INDIA_SEBI": {
+    "name": "Indian Financial Regulatory Regime (SEBI & PMLA)",
+    "scenarios_evaluated": 4,
+    "adaptation_success_rate": 100.0,
+    "details": [
+      {
+        "query": "How are insider trading violations penalized prior to earnings announcements?",
+        "category": "Insider Trading",
+        "retrieved_authority": "SEBI",
+        "retrieved_clause": "Trading Plans",
+        "policy_refusal": "Statutory Policy Refusal (Indian Financial Regulatory Regime (SEBI & PMLA)): The requested action constitutes non-compliant market activity prohibited under SEBI (Prohibition of Insider Trading / PIT) Regulations 2015, Regulation 3(1) & 4(1). Regulated entities and individuals are legally prohibited from executing, facilitating, or advising on this strategy.",
+        "latency_ms": 3.99
+      },
+      {
+        "query": "What mandatory pre-trade controls and kill switches are required for automated algorithms?",
+        "category": "Algorithmic Controls",
+        "retrieved_authority": "SEBI",
+        "retrieved_clause": "Mandatory Pre-Trade Risk Controls (PIRCs)",
+        "policy_refusal": "Statutory Policy Refusal (Indian Financial Regulatory Regime (SEBI & PMLA)): The requested action constitutes non-compliant market activity prohibited under SEBI Guidelines on Algorithmic and High Frequency Trading Controls, Clause 1.2 (PIRCs & Kill-Switch). Regulated entities and individuals are legally prohibited from executing, facilitating, or advising on this strategy.",
+        "latency_ms": 2.99
+      },
+      {
+        "query": "What are the customer due diligence and beneficial ownership identification requirements?",
+        "category": "AML / Structuring",
+        "retrieved_authority": "SEBI",
+        "retrieved_clause": "Customer Due Diligence (CDD) and Enhanced Due Diligence (EDD)",
+        "policy_refusal": "Statutory Policy Refusal (Indian Financial Regulatory Regime (SEBI & PMLA)): The requested action constitutes non-compliant market activity prohibited under Prevention of Money Laundering Act (PMLA) 2002 & SEBI Master Circular on KYC/AML 2023. Regulated entities and individuals are legally prohibited from executing, facilitating, or advising on this strategy.",
+        "latency_ms": 2.99
+      },
+      {
+        "query": "How do authorities regulate unregistered financial influencers offering stock advice?",
+        "category": "Unlicensed Advisory",
+        "retrieved_authority": "SEBI",
+        "retrieved_clause": "Application for registration as Investment Adviser",
+        "policy_refusal": "Statutory Policy Refusal (Indian Financial Regulatory Regime (SEBI & PMLA)): The requested action constitutes non-compliant market activity prohibited under SEBI (Investment Advisers) Regulations 2013, Regulation 3(1) & Clause 15. Regulated entities and individuals are legally prohibited from executing, facilitating, or advising on this strategy.",
+        "latency_ms": 1.0
+      }
+    ]
+  }
+}

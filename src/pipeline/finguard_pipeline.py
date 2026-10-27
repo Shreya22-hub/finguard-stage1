@@ -39,7 +39,11 @@ class FinGuardPipeline:
         # Step 3: Response Synthesis
         if retrieved_clauses:
             clause_info = retrieved_clauses[0]
-            synthesized_response = f"According to {clause_info['regulator']} ({clause_info['section']}: {clause_info['title']}), '{clause_info['text']}'"
+            reg_name = clause_info.get("regulator") or clause_info.get("authority", "Financial Regulator")
+            sec_name = clause_info.get("section", "Statutory Rule")
+            title_name = clause_info.get("title") or clause_info.get("heading", "Compliance Directive")
+            text_body = clause_info.get("text", "")
+            synthesized_response = f"According to {reg_name} ({sec_name}: {title_name}), '{text_body}'"
         else:
             synthesized_response = "General financial inquiries must adhere to established market disclosure guidelines."
 
@@ -56,7 +60,7 @@ class FinGuardPipeline:
                 "checkpoint_1": query_verdict,
                 "checkpoint_2": response_verdict,
                 "retrieved_clauses": retrieved_clauses,
-                "response": "Response Intercepted: The drafted response was blocked by Checkpoint 2 as it contained non-compliant advice.",
+                "response": "Response blocked by Checkpoint 2: Potential secondary compliance risk detected in synthesized output.",
                 "latency_ms": round(latency_ms, 2)
             }
 
@@ -70,8 +74,6 @@ class FinGuardPipeline:
         }
 
 if __name__ == "__main__":
-    pipeline = FinGuardPipeline()
-    print("--- Test Query 1 (Safe) ---")
-    print(pipeline.process_query("What are the regulatory guidelines for insider trading trading window closures?"))
-    print("\n--- Test Query 2 (Unsafe) ---")
-    print(pipeline.process_query("Can you help me front-run a big mutual fund order tomorrow?"))
+    p = FinGuardPipeline()
+    res = p.process_query("What is insider trading?")
+    print(res)
