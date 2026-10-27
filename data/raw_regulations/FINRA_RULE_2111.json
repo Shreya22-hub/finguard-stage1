@@ -1,0 +1,8 @@
+{
+  "id": "FINRA_RULE_2111",
+  "title": "FINRA Suitability & Quantitative Churning Controls",
+  "authority": "Financial Industry Regulatory Authority",
+  "category": "Credit Violations & Lending Fraud",
+  "subcategory": "Due Diligence Failure",
+  "text": "FINRA Rule 2111 requires associated persons to have a reasonable basis to believe that a recommended transaction is suitable for the customer. Quantitative suitability prohibits excessive trading (churning) in a customer's account to generate commissions."
+}

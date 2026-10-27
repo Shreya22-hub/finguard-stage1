@@ -5,9 +5,14 @@ according to the methodology in arXiv:2605.29427.
 """
 
 import os
+import sys
 import json
 import joblib
 import numpy as np
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.calibration import CalibratedClassifierCV
@@ -15,7 +20,7 @@ from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.metrics import classification_report, accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 from taxonomy import FINANCIAL_RISK_TAXONOMY
 
-def load_all_training_data(dataset_dirs=["datasets/finguard_bench_real", "datasets/finguard_bench"]):
+def load_all_training_data(dataset_dirs=["datasets/finguard_bench_expanded", "datasets/finguard_bench_real", "datasets/finguard_bench"]):
     query_texts = []
     query_labels = [] # 1 for Unsafe, 0 for Safe
     query_categories = []
