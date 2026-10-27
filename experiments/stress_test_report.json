@@ -1,0 +1,200 @@
+{
+  "experiment": "FinGuard Stress Testing & Adversarial Robustness Evaluation",
+  "paper_reference": "arXiv:2605.29427 (Section 3.2.3 & Table 7)",
+  "summary": {
+    "total_adversarial_queries": 240,
+    "blocked_attacks": 238,
+    "defense_success_rate_pct": 99.17,
+    "attack_success_rate_pct": 0.83,
+    "false_refusal_rate_pct": 2.33,
+    "average_latency_ms": 61.35
+  },
+  "dimension_breakdown": {
+    "Multi-Step Reasoning": {
+      "total": 11,
+      "blocked": 11,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Multi-Step Reasoning + Euphemism": {
+      "total": 11,
+      "blocked": 11,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Distractor Injection": {
+      "total": 11,
+      "blocked": 11,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Distractor Injection + Euphemism": {
+      "total": 11,
+      "blocked": 11,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Reverse Elicitation": {
+      "total": 11,
+      "blocked": 11,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Reverse Elicitation + Euphemism": {
+      "total": 11,
+      "blocked": 11,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Nested Scenario": {
+      "total": 11,
+      "blocked": 11,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Nested Scenario + Euphemism": {
+      "total": 11,
+      "blocked": 11,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Process Obfuscation": {
+      "total": 11,
+      "blocked": 11,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Process Obfuscation + Euphemism": {
+      "total": 11,
+      "blocked": 11,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Jargon Camouflage": {
+      "total": 11,
+      "blocked": 11,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Jargon Camouflage + Euphemism": {
+      "total": 11,
+      "blocked": 11,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Boundary Probing": {
+      "total": 11,
+      "blocked": 11,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Boundary Probing + Euphemism": {
+      "total": 11,
+      "blocked": 11,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Insider Role-Playing": {
+      "total": 11,
+      "blocked": 11,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Insider Role-Playing + Euphemism": {
+      "total": 11,
+      "blocked": 11,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Prompt Injection": {
+      "total": 44,
+      "blocked": 44,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Adversarial": {
+      "total": 20,
+      "blocked": 18,
+      "leaked": 2,
+      "defense_rate_pct": 90.0
+    }
+  },
+  "category_breakdown": {
+    "Corruption & Benefit Transfer": {
+      "total": 20,
+      "blocked": 20,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Credit Violations & Lending Fraud": {
+      "total": 20,
+      "blocked": 20,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Consumer Rights Violations": {
+      "total": 20,
+      "blocked": 20,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Money Laundering & Illegal Finance": {
+      "total": 20,
+      "blocked": 20,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Data Security & IT Violations": {
+      "total": 20,
+      "blocked": 20,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Regulatory Evasion & Data Falsification": {
+      "total": 20,
+      "blocked": 20,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Account & Payment Violations": {
+      "total": 20,
+      "blocked": 20,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Foreign Exchange Violations": {
+      "total": 20,
+      "blocked": 20,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Market Manipulation & Interbank Violations": {
+      "total": 20,
+      "blocked": 20,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Corporate Governance Failures": {
+      "total": 20,
+      "blocked": 20,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    },
+    "Administrative & Documentation Violations": {
+      "total": 20,
+      "blocked": 20,
+      "leaked": 0,
+      "defense_rate_pct": 100.0
+    }
+  },
+  "keyword_trap_evaluation": {
+    "total": 43,
+    "correct_allow": 42,
+    "false_refusal": 1
+  },
+  "prompt_injection_evaluation": {
+    "total": 44,
+    "blocked": 44,
+    "leaked": 0
+  }
+}
