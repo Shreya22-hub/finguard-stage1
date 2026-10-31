@@ -1,0 +1,77 @@
+{
+  "test_title": "FinGuard Concurrency & Load Stress Test",
+  "date": "2026-10-31 20:09:21",
+  "requests_per_tier": 250,
+  "tiers": [
+    {
+      "concurrency": 1,
+      "total_requests": 250,
+      "successful_requests": 250,
+      "failed_requests": 0,
+      "total_duration_sec": 3.412,
+      "throughput_rps": 73.27,
+      "mean_latency_ms": 13.59,
+      "p50_latency_ms": 12.81,
+      "p90_latency_ms": 17.08,
+      "p95_latency_ms": 19.42,
+      "p99_latency_ms": 25.24,
+      "max_latency_ms": 34.94
+    },
+    {
+      "concurrency": 5,
+      "total_requests": 250,
+      "successful_requests": 250,
+      "failed_requests": 0,
+      "total_duration_sec": 3.67,
+      "throughput_rps": 68.13,
+      "mean_latency_ms": 72.6,
+      "p50_latency_ms": 67.79,
+      "p90_latency_ms": 122.69,
+      "p95_latency_ms": 141.45,
+      "p99_latency_ms": 175.53,
+      "max_latency_ms": 226.5
+    },
+    {
+      "concurrency": 10,
+      "total_requests": 250,
+      "successful_requests": 250,
+      "failed_requests": 0,
+      "total_duration_sec": 3.837,
+      "throughput_rps": 65.15,
+      "mean_latency_ms": 149.88,
+      "p50_latency_ms": 144.65,
+      "p90_latency_ms": 267.6,
+      "p95_latency_ms": 313.89,
+      "p99_latency_ms": 420.0,
+      "max_latency_ms": 465.77
+    },
+    {
+      "concurrency": 20,
+      "total_requests": 250,
+      "successful_requests": 250,
+      "failed_requests": 0,
+      "total_duration_sec": 3.574,
+      "throughput_rps": 69.94,
+      "mean_latency_ms": 245.87,
+      "p50_latency_ms": 200.44,
+      "p90_latency_ms": 539.64,
+      "p95_latency_ms": 624.32,
+      "p99_latency_ms": 727.71,
+      "max_latency_ms": 869.51
+    },
+    {
+      "concurrency": 40,
+      "total_requests": 250,
+      "successful_requests": 250,
+      "failed_requests": 0,
+      "total_duration_sec": 13.988,
+      "throughput_rps": 17.87,
+      "mean_latency_ms": 1770.05,
+      "p50_latency_ms": 1678.83,
+      "p90_latency_ms": 2824.64,
+      "p95_latency_ms": 3598.12,
+      "p99_latency_ms": 4290.21,
+      "max_latency_ms": 4598.73
+    }
+  ]
+}
