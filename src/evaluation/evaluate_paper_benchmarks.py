@@ -56,7 +56,26 @@ def load_test_benchmarks():
                         "source": "finguard_bench"
                     })
 
-    # 3. Adversarial Test Cases
+    # 3. Nandhakumar Finance Injection Benchmark Held-out Test Split
+    try:
+        from datasets import load_dataset
+        ds = load_dataset("nandhak12/finguard-finance-injection-dataset")
+        for item in ds["test"]:
+            lbl = 1 if str(item.get("label")).upper() == "ATTACK" else 0
+            test_samples.append({
+                "id": "INJECTION_TEST",
+                "query": item.get("user_message"),
+                "query_label": lbl,
+                "query_category": "Prompt Injection / Financial Attack" if lbl == 1 else "Safe / Non-Harmful",
+                "query_subcategories": [],
+                "response": "",
+                "response_label": 0,
+                "source": "nandhak12_injection_test"
+            })
+    except Exception as e:
+        print(f"Warning: Could not load HuggingFace test split: {e}")
+
+    # 4. Adversarial Test Cases
     adv_path = "datasets/adversarial_test.jsonl"
     adv_samples = []
     if os.path.exists(adv_path):

@@ -1,6 +1,8 @@
 {
-  "query_samples": 462,
-  "response_samples": 462,
-  "query_f1": 100.0,
-  "query_accuracy": 100.0
+  "query_samples": 10529,
+  "response_samples": 50,
+  "train_only": true,
+  "validation_excluded": true,
+  "test_excluded": true,
+  "leakage_audited": true
 }
