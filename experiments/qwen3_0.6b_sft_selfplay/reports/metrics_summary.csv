@@ -1,0 +1,10 @@
+task,model,n,accuracy_pct,unsafe_precision_pct,unsafe_recall_pct,unsafe_f1_pct,tn,fp,fn,tp,invalid_outputs,invalid_output_rate_pct
+compliance_query,Base Qwen,16,50.0,50.0,100.0,66.67,0,8,0,8,0,0.0
+compliance_query,LoRA SFT,16,50.0,0.0,0.0,0.0,8,0,8,0,0,0.0
+compliance_query,Post-GRPO attempt (0 updates),16,50.0,0.0,0.0,0.0,8,0,8,0,0,0.0
+compliance_response,Base Qwen,16,50.0,50.0,100.0,66.67,0,8,0,8,0,0.0
+compliance_response,LoRA SFT,16,50.0,0.0,0.0,0.0,8,0,8,0,0,0.0
+compliance_response,Post-GRPO attempt (0 updates),16,50.0,0.0,0.0,0.0,8,0,8,0,0,0.0
+injection,Base Qwen,200,52.5,100.0,5.0,9.52,100,0,95,5,0,0.0
+injection,LoRA SFT,200,99.5,100.0,99.0,99.5,100,0,1,99,0,0.0
+injection,Post-GRPO attempt (0 updates),200,99.5,100.0,99.0,99.5,100,0,1,99,0,0.0

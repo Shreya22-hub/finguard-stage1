@@ -1,0 +1,5 @@
+{
+  "sft": "2a6976cb663f5de27e798711dcf2054a6b8083a930cc2dddfdbd98288a222482",
+  "mini_self_play_rl": "62180c67d098f2139e15f138011c3ebf78802f4882fc5d2ca725d0ba32f4d86d",
+  "sft_and_rl_adapters_differ": true
+}

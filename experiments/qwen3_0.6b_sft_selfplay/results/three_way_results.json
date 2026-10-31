@@ -1,0 +1,152 @@
+{
+  "base_model": "Qwen/Qwen3-0.6B",
+  "method": "Zero-shot vs LoRA SFT vs constrained-label mini self-play RL",
+  "training_records": 10786,
+  "self_play_rl_episodes": 24,
+  "self_play_rl_optimizer_updates": 14,
+  "self_play_rl_discarded_groups": 10,
+  "by_task": {
+    "compliance_query": {
+      "zero_shot": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 50.0,
+        "unsafe_precision_pct": 0.0,
+        "unsafe_recall_pct": 0.0,
+        "unsafe_f1_pct": 0.0,
+        "tn": 8,
+        "fp": 0,
+        "fn": 8,
+        "tp": 0,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      },
+      "sft": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 81.25,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 62.5,
+        "unsafe_f1_pct": 76.92,
+        "tn": 8,
+        "fp": 0,
+        "fn": 3,
+        "tp": 5,
+        "invalid_outputs": 1,
+        "invalid_output_rate_pct": 6.25
+      },
+      "mini_self_play_rl": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 81.25,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 62.5,
+        "unsafe_f1_pct": 76.92,
+        "tn": 8,
+        "fp": 0,
+        "fn": 3,
+        "tp": 5,
+        "invalid_outputs": 1,
+        "invalid_output_rate_pct": 6.25
+      }
+    },
+    "compliance_response": {
+      "zero_shot": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 50.0,
+        "unsafe_precision_pct": 0.0,
+        "unsafe_recall_pct": 0.0,
+        "unsafe_f1_pct": 0.0,
+        "tn": 8,
+        "fp": 0,
+        "fn": 8,
+        "tp": 0,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      },
+      "sft": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 81.25,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 62.5,
+        "unsafe_f1_pct": 76.92,
+        "tn": 8,
+        "fp": 0,
+        "fn": 3,
+        "tp": 5,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      },
+      "mini_self_play_rl": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 81.25,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 62.5,
+        "unsafe_f1_pct": 76.92,
+        "tn": 8,
+        "fp": 0,
+        "fn": 3,
+        "tp": 5,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      }
+    },
+    "injection": {
+      "zero_shot": {
+        "n": 200,
+        "gold_safe": 100,
+        "gold_unsafe": 100,
+        "accuracy_pct": 52.5,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 5.0,
+        "unsafe_f1_pct": 9.52,
+        "tn": 100,
+        "fp": 0,
+        "fn": 95,
+        "tp": 5,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      },
+      "sft": {
+        "n": 200,
+        "gold_safe": 100,
+        "gold_unsafe": 100,
+        "accuracy_pct": 99.5,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 99.0,
+        "unsafe_f1_pct": 99.5,
+        "tn": 100,
+        "fp": 0,
+        "fn": 1,
+        "tp": 99,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      },
+      "mini_self_play_rl": {
+        "n": 200,
+        "gold_safe": 100,
+        "gold_unsafe": 100,
+        "accuracy_pct": 99.5,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 99.0,
+        "unsafe_f1_pct": 99.5,
+        "tn": 100,
+        "fp": 0,
+        "fn": 1,
+        "tp": 99,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      }
+    }
+  },
+  "caveat": "Compliance uses a 16-pair manual demonstration set. Injection uses a balanced 200-example test sample. These are not the paper's 1,020-example expert-annotated benchmark."
+}
