@@ -130,8 +130,18 @@ class FinGuardClassifier:
             probs = q_guard.predict_proba([text])[0] if hasattr(q_guard, "predict_proba") else [0.5, 0.5]
             
             if pred == 1:
-                # Unsafe: route to specific category
+                # Route to specific category
                 cat = str(cat_router.predict([text])[0]) if cat_router else "Regulatory Non-Compliance"
+                
+                # If category classifier explicitly recognizes benign content, do not false-refuse
+                if "safe" in cat.lower() or "non-harmful" in cat.lower():
+                    return {
+                        "is_safe": True,
+                        "label": "safe",
+                        "category": None,
+                        "confidence": round(float(probs[0]) if len(probs) > 1 else 0.95, 4)
+                    }
+
                 conf = float(probs[1]) if len(probs) > 1 else 0.95
                 return {
                     "is_safe": False,
