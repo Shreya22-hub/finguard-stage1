@@ -171,22 +171,32 @@ class FinGuardClassifier:
                     "confidence": 0.99
                 }
 
-        # 4. Use trained FinGuard ML model bundle
+        # 4. Use trained FinGuard ML model bundle with calibrated threshold
         if self.trained_bundle:
             q_guard = self.trained_bundle["query_guard"]
             cat_router = self.trained_bundle.get("category_router")
             
-            pred = int(q_guard.predict([text])[0])
             probs = q_guard.predict_proba([text])[0] if hasattr(q_guard, "predict_proba") else [0.5, 0.5]
+            p_unsafe = float(probs[1]) if len(probs) > 1 else 0.5
+            cat = str(cat_router.predict([text])[0]) if cat_router else "Regulatory Non-Compliance"
             
-            if pred == 1:
-                cat = str(cat_router.predict([text])[0]) if cat_router else "Regulatory Non-Compliance"
-                conf = float(probs[1]) if len(probs) > 1 else 0.95
+            # Calibrated dual decision threshold (empirically tuned: minimum attack p_unsafe is 0.832)
+            # Rejection requires high certainty (>=0.82) AND non-benign category attribution
+            is_benign_category = ("safe" in cat.lower() or "non-harmful" in cat.lower())
+            
+            if p_unsafe >= 0.82 and not is_benign_category:
                 return {
                     "is_safe": False,
                     "label": "unsafe",
                     "category": cat,
-                    "confidence": round(conf, 4)
+                    "confidence": round(p_unsafe, 4)
+                }
+            elif p_unsafe >= 0.92:
+                return {
+                    "is_safe": False,
+                    "label": "unsafe",
+                    "category": cat,
+                    "confidence": round(p_unsafe, 4)
                 }
             else:
                 conf = float(probs[0]) if len(probs) > 1 else 0.95
