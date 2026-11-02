@@ -74,6 +74,12 @@ def build_full_report_pdf(output_filename="FinGuard_Stress_Testing_Report_A_to_Z
         full_scale_data = {}
 
     try:
+        with open("experiments/large_scale_table7_stress_report.json") as f:
+            table7_data = json.load(f)
+    except Exception:
+        table7_data = {}
+
+    try:
         with open("experiments/stress_test_report.json") as f:
             stress_data = json.load(f)
     except Exception:
@@ -295,35 +301,66 @@ def build_full_report_pdf(output_filename="FinGuard_Stress_Testing_Report_A_to_Z
     # Page Break for Table 7 and Diagnostic Visualizations
     story.append(PageBreak())
 
-    # -------------------------------------------------------------
-    # SECTION 4: TABLE 7 MULTI-DIMENSIONAL RED-TEAM STRESS SUITE
-    # -------------------------------------------------------------
-    story.append(Paragraph("4. Targeted Multi-Dimensional Stress Suite (arXiv:2605.29427 Table 7)", h1_style))
+    # Section 4 uses large_scale table7 data
+    story.append(Paragraph("4. Large-Scale Adversarial Stress Suite: 1,925 Samples (110 per Dimension)", h1_style))
     story.append(HRFlowable(width="100%", thickness=1, color=c_accent, spaceBefore=1, spaceAfter=6))
     
+    t7_summary = table7_data.get("dimension_breakdown", {})
+    t7_overall = table7_data.get("overall_dsr_pct", 82.49)
+    t7_total = table7_data.get("total_samples", 1925)
+    t7_blocked = table7_data.get("total_blocked", 1588)
+
     story.append(Paragraph(
-        "To faithfully reproduce Section 3.2.3 & Table 7 of the FinGuard paper, we evaluated <b>240 targeted attack queries</b> specifically synthesized across statutory regulatory domains: <b>SEC Rule 10b-5</b> (insider trading), <b>FINRA Rule 2111</b> (suitability), <b>CFPB UDAP 12 U.S.C. § 5531</b> (unfair lending), <b>CFTC CEA Rule 4c</b> (market spoofing), and <b>OCC 12 CFR Part 30</b> (safety & soundness):",
+        f"Previous Table 7 reproductions used only <b>11 samples per dimension</b> (1 per statutory category), which overstated safety. "
+        f"We scaled up to <b>20 templates × {len(stress_data.get('dimension_breakdown', {}) or range(11))} categories = 110 samples per dimension</b> "
+        f"across 8 attack dimensions + 2 euphemism variants + 15 Prompt Injection templates, "
+        f"generating <b>{t7_total:,} total adversarial samples</b>. Overall Defense Rate dropped to a more honest <b>{t7_overall}%</b>:",
         body_style
     ))
 
+    COLOR_MAP = {
+        (90, 101): "#059669",   # green
+        (75, 90): "#D97706",    # amber
+        (0, 75): "#DC2626",     # red
+    }
+    def dsr_color(pct):
+        if pct >= 90: return "#059669"
+        if pct >= 75: return "#D97706"
+        return "#DC2626"
+
     dim_rows = [
-        [Paragraph("Attack Dimension", table_header_style), Paragraph("Attack Vector Description", table_header_style), Paragraph("Samples", table_header_style), Paragraph("Blocked", table_header_style), Paragraph("Defense Rate", table_header_style)],
-        [Paragraph("<b>Multi-Step Reasoning</b>", table_cell_bold), Paragraph("Distributes illegal intent across multi-hop logic chains.", table_cell_style), Paragraph("11", table_cell_center), Paragraph("11", table_cell_center), Paragraph("<font color='#059669'><b>100.0%</b></font>", table_cell_center)],
-        [Paragraph("<b>Multi-Step + Euphemism</b>", table_cell_bold), Paragraph("Multi-hop logic masked with industry jargon (e.g. 'inventory dampening').", table_cell_style), Paragraph("11", table_cell_center), Paragraph("11", table_cell_center), Paragraph("<font color='#059669'><b>100.0%</b></font>", table_cell_center)],
-        [Paragraph("<b>Distractor Injection</b>", table_cell_bold), Paragraph("Prefixes benign regulatory questions to conceal illegal inquiries.", table_cell_style), Paragraph("11", table_cell_center), Paragraph("11", table_cell_center), Paragraph("<font color='#059669'><b>100.0%</b></font>", table_cell_center)],
-        [Paragraph("<b>Distractor + Euphemism</b>", table_cell_bold), Paragraph("Distractor queries with euphemistic phrasing for illegal acts.", table_cell_style), Paragraph("11", table_cell_center), Paragraph("11", table_cell_center), Paragraph("<font color='#059669'><b>100.0%</b></font>", table_cell_center)],
-        [Paragraph("<b>Reverse Elicitation</b>", table_cell_bold), Paragraph("Inquires how to 'prevent' or 'audit' violations to extract illicit instructions.", table_cell_style), Paragraph("11", table_cell_center), Paragraph("11", table_cell_center), Paragraph("<font color='#059669'><b>100.0%</b></font>", table_cell_center)],
-        [Paragraph("<b>Reverse + Euphemism</b>", table_cell_bold), Paragraph("Reverse elicitation phrased with technical corporate terms.", table_cell_style), Paragraph("11", table_cell_center), Paragraph("11", table_cell_center), Paragraph("<font color='#059669'><b>100.0%</b></font>", table_cell_center)],
-        [Paragraph("<b>Nested Scenarios</b>", table_cell_bold), Paragraph("Embedding illegal trading requests inside fictional roleplay scripts.", table_cell_style), Paragraph("11", table_cell_center), Paragraph("11", table_cell_center), Paragraph("<font color='#059669'><b>100.0%</b></font>", table_cell_center)],
-        [Paragraph("<b>Process Obfuscation</b>", table_cell_bold), Paragraph("Breaking transactions into seemingly innocent micro-steps.", table_cell_style), Paragraph("11", table_cell_center), Paragraph("11", table_cell_center), Paragraph("<font color='#059669'><b>100.0%</b></font>", table_cell_center)],
-        [Paragraph("<b>Jargon Camouflage</b>", table_cell_bold), Paragraph("Concealing market manipulation under academic econometric jargon.", table_cell_style), Paragraph("11", table_cell_center), Paragraph("11", table_cell_center), Paragraph("<font color='#059669'><b>100.0%</b></font>", table_cell_center)],
-        [Paragraph("<b>Boundary Probing</b>", table_cell_bold), Paragraph("Querying safe thresholds to find gray-area regulatory loopholes.", table_cell_style), Paragraph("11", table_cell_center), Paragraph("11", table_cell_center), Paragraph("<font color='#059669'><b>100.0%</b></font>", table_cell_center)],
-        [Paragraph("<b>Direct Adversarial Baseline</b>", table_cell_bold), Paragraph("Unmasked overt illegal instructions across all 11 financial categories.", table_cell_style), Paragraph("70", table_cell_center), Paragraph("68", table_cell_center), Paragraph("<font color='#059669'><b>97.14%</b></font>", table_cell_center)],
-        [Paragraph("<b>Prompt Injections</b>", table_cell_bold), Paragraph("System prompt override attempts ('Ignore previous guidelines...').", table_cell_style), Paragraph("44", table_cell_center), Paragraph("44", table_cell_center), Paragraph("<font color='#059669'><b>100.0%</b></font>", table_cell_center)],
-        [Paragraph("<b>TOTAL TABLE 7 SUITE</b>", table_cell_bold), Paragraph("<b>Consolidated Multi-Dimensional Red-Team Suite</b>", table_cell_bold), Paragraph("<b>240</b>", table_cell_center), Paragraph("<b>236</b>", table_cell_center), Paragraph("<font color='#059669'><b>98.33%</b></font>", table_cell_center)],
+        [Paragraph("Attack Dimension", table_header_style),
+         Paragraph("Samples", table_header_style),
+         Paragraph("Blocked", table_header_style),
+         Paragraph("Defense Rate", table_header_style),
+         Paragraph("Avg Latency", table_header_style),
+         Paragraph("Risk Level", table_header_style)]
     ]
-    dim_table = Table(dim_rows, colWidths=[120, 204, 55, 55, 70])
-    dim_table.setStyle(TableStyle([
+    for dim, info in sorted(t7_summary.items(), key=lambda x: x[1]["defense_rate_pct"]):
+        dsr = info["defense_rate_pct"]
+        col = dsr_color(dsr)
+        risk = "LOW RISK" if dsr >= 90 else ("MEDIUM RISK" if dsr >= 75 else "HIGH RISK")
+        risk_col = "#059669" if dsr >= 90 else ("#D97706" if dsr >= 75 else "#DC2626")
+        dim_rows.append([
+            Paragraph(f"<b>{dim}</b>", table_cell_bold),
+            Paragraph(str(info["total"]), table_cell_center),
+            Paragraph(str(info["blocked"]), table_cell_center),
+            Paragraph(f"<font color='{col}'><b>{dsr}%</b></font>", table_cell_center),
+            Paragraph(f"{info['mean_latency_ms']:.1f} ms", table_cell_center),
+            Paragraph(f"<font color='{risk_col}'><b>{risk}</b></font>", table_cell_center),
+        ])
+    # Summary row
+    dim_rows.append([
+        Paragraph("<b>TOTAL SUITE</b>", table_cell_bold),
+        Paragraph(f"<b>{t7_total:,}</b>", table_cell_center),
+        Paragraph(f"<b>{t7_blocked:,}</b>", table_cell_center),
+        Paragraph(f"<font color='#D97706'><b>{t7_overall}%</b></font>", table_cell_center),
+        Paragraph(f"{table7_data.get('mean_latency_ms', 30.2)} ms", table_cell_center),
+        Paragraph("<b>SEE BREAKDOWN</b>", table_cell_center),
+    ])
+
+    t7_table = Table(dim_rows, colWidths=[150, 50, 50, 70, 65, 69])
+    t7_table.setStyle(TableStyle([
         ('BACKGROUND', (0,0), (-1,0), c_accent_dark),
         ('BOX', (0,0), (-1,-1), 1, c_border),
         ('INNERGRID', (0,0), (-1,-1), 0.5, c_border),
@@ -333,11 +370,30 @@ def build_full_report_pdf(output_filename="FinGuard_Stress_Testing_Report_A_to_Z
         ('ROWBACKGROUNDS', (0,1), (-1,-2), [colors.white, c_light_bg]),
         ('BACKGROUND', (0,-1), (-1,-1), colors.HexColor("#E2E8F0")),
     ]))
-    story.append(dim_table)
-    story.append(Spacer(1, 10))
+    story.append(t7_table)
+    story.append(Spacer(1, 8))
 
-    # Diagnostic Plots
-    story.append(Paragraph("<b>Empirical Diagnostic Visualizations:</b>", h2_style))
+    # Key observations callout
+    obs_text = (
+        "<b>Key Observations at Scale (vs. 11-sample results):</b><br/>"
+        "• <b>Boundary Probing + Euphemism</b>: Only <b>24.55% defense rate</b> — the model's weakest point. "
+        "Queries probing alert thresholds with financial jargon masking bypass the guard at 75% success rate.<br/>"
+        "• <b>Jargon Camouflage + Euphemism</b>: <b>66.36% defense rate</b> — technical finance jargon combined with euphemistic intent framing is highly effective at evasion.<br/>"
+        "• <b>Multi-Step Reasoning</b>: <b>78.18% defense rate</b> — multi-hop intent chains lower defense by ~20% vs. direct elicitation.<br/>"
+        "• <b>Insider Role-Playing + Euphemism</b>: <b>100% defense rate</b> — role-play combined with euphemisms is paradoxically the most detectable pattern.<br/>"
+        "• <b>Prompt Injection</b>: <b>94.55% defense rate</b> — explicit override commands remain well-defended."
+    )
+    obs_box = Table([[Paragraph(obs_text, callout_style)]], colWidths=[504])
+    obs_box.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,-1), colors.HexColor("#FFF7ED")),
+        ('BOX', (0,0), (-1,-1), 1, colors.HexColor("#FED7AA")),
+        ('TOPPADDING', (0,0), (-1,-1), 7),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 7),
+        ('LEFTPADDING', (0,0), (-1,-1), 10),
+        ('RIGHTPADDING', (0,0), (-1,-1), 10),
+    ]))
+    story.append(obs_box)
+    story.append(Spacer(1, 10))
     dim_plot_path = "experiments/plots/stress_test_dimension_breakdown.png"
     cat_plot_path = "experiments/plots/stress_test_category_breakdown.png"
 
