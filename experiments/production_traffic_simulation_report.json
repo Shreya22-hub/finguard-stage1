@@ -1,0 +1,22 @@
+{
+  "simulation_profile": {
+    "total_queries": 2000,
+    "benign_queries": 1900,
+    "attack_queries": 100,
+    "benign_ratio_pct": 95.0,
+    "attack_ratio_pct": 5.000000000000004
+  },
+  "metrics": {
+    "attack_detection_success_rate_dsr_pct": 77.0,
+    "false_refusal_rate_frr_pct": 1.0,
+    "overall_accuracy_pct": 97.9,
+    "balanced_accuracy_pct": 88.0,
+    "precision_pct": 80.21,
+    "confusion_matrix": {
+      "true_positives_blocked": 77,
+      "false_negatives_leaked": 23,
+      "true_negatives_allowed": 1881,
+      "false_positives_refused": 19
+    }
+  }
+}
