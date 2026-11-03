@@ -7,7 +7,7 @@ Produces a comprehensive, large-scale adversarial stress suite covering:
 - Prompt injection & jailbreak vectors
 - Linguistic & syntactic perturbation stress (leetspeak, typos, delimiters)
 - Benign control & educational queries (measuring False Refusal Rate / FRR)
-Target: 5,000+ statistically sound stress test samples.
+Target: 10,000+ statistically sound stress test samples.
 """
 
 import os
@@ -526,10 +526,10 @@ def apply_perturbation(text, mode="mixed"):
 # ────────────────────────────────────────────────────────────────────────────
 def generate_large_scale_stress_suite(
     output_path="datasets/finguard_bench_expanded/stress_test_suite.jsonl",
-    samples_per_dim_per_cat=55
+    samples_per_dim_per_cat=105
 ):
     """
-    Generates a massive, multi-dimensional adversarial stress suite (5,000+ samples).
+    Generates a massive, multi-dimensional adversarial stress suite (10,000+ samples).
     Covers:
     - 8 Adversarial Dimensions (raw intent variants)
     - 8 Adversarial Dimensions + Euphemistic Camouflage variants
@@ -678,4 +678,4 @@ def generate_large_scale_stress_suite(
 
 
 if __name__ == "__main__":
-    generate_large_scale_stress_suite(samples_per_dim_per_cat=55)
+    generate_large_scale_stress_suite(samples_per_dim_per_cat=105)
