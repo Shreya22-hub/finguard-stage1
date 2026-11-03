@@ -1,0 +1,23 @@
+{
+  "model_type": "TF-IDF + Calibrated Logistic Regression Baseline",
+  "evaluation_protocol": "Frozen checkpoint evaluated on untouched held-out test splits",
+  "checkpoint_1_query_guard": {
+    "test_samples": 3080,
+    "accuracy": 99.19,
+    "precision": 99.05,
+    "recall": 98.59,
+    "f1": 98.82,
+    "confusion_matrix": {
+      "true_positives": 1046,
+      "false_positives": 10,
+      "true_negatives": 2009,
+      "false_negatives": 15
+    }
+  },
+  "adversarial_robustness": {
+    "accuracy": 83.33,
+    "precision": 94.12,
+    "recall": 80.0,
+    "f1": 86.49
+  }
+}

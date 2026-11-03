@@ -1,0 +1,106 @@
+{
+  "experiment": "Qwen3-0.6B full-data SFT with compliance-balanced continuation",
+  "base_model": "Qwen/Qwen3-0.6B",
+  "training_records_original": 10786,
+  "continuation_training_draws": 856,
+  "continuation_training_minutes": 3.82,
+  "adapter_path": "/content/finguard_qwen3_compliance_balanced_adapter",
+  "by_task": {
+    "compliance_query": {
+      "base": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 50.0,
+        "unsafe_precision_pct": 0.0,
+        "unsafe_recall_pct": 0.0,
+        "unsafe_f1_pct": 0.0,
+        "tn": 8,
+        "fp": 0,
+        "fn": 8,
+        "tp": 0,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      },
+      "sft": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 81.25,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 62.5,
+        "unsafe_f1_pct": 76.92,
+        "tn": 8,
+        "fp": 0,
+        "fn": 3,
+        "tp": 5,
+        "invalid_outputs": 1,
+        "invalid_output_rate_pct": 6.25
+      }
+    },
+    "compliance_response": {
+      "base": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 50.0,
+        "unsafe_precision_pct": 0.0,
+        "unsafe_recall_pct": 0.0,
+        "unsafe_f1_pct": 0.0,
+        "tn": 8,
+        "fp": 0,
+        "fn": 8,
+        "tp": 0,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      },
+      "sft": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 81.25,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 62.5,
+        "unsafe_f1_pct": 76.92,
+        "tn": 8,
+        "fp": 0,
+        "fn": 3,
+        "tp": 5,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      }
+    },
+    "injection": {
+      "base": {
+        "n": 200,
+        "gold_safe": 100,
+        "gold_unsafe": 100,
+        "accuracy_pct": 52.5,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 5.0,
+        "unsafe_f1_pct": 9.52,
+        "tn": 100,
+        "fp": 0,
+        "fn": 95,
+        "tp": 5,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      },
+      "sft": {
+        "n": 200,
+        "gold_safe": 100,
+        "gold_unsafe": 100,
+        "accuracy_pct": 99.5,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 99.0,
+        "unsafe_f1_pct": 99.5,
+        "tn": 100,
+        "fp": 0,
+        "fn": 1,
+        "tp": 99,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      }
+    }
+  }
+}

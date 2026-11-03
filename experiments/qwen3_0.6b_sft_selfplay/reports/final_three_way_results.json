@@ -1,0 +1,148 @@
+{
+  "base_model": "Qwen/Qwen3-0.6B",
+  "evaluation_note": "Compliance metrics use a 16-decision-per-task manual smoke set. Injection metrics use a balanced 200-example test sample. These are not the original paper's expert benchmark.",
+  "grpo_updates": 14,
+  "by_task": {
+    "compliance_query": {
+      "base": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 50.0,
+        "unsafe_precision_pct": 0.0,
+        "unsafe_recall_pct": 0.0,
+        "unsafe_f1_pct": 0.0,
+        "tn": 8,
+        "fp": 0,
+        "fn": 8,
+        "tp": 0,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      },
+      "sft": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 81.25,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 62.5,
+        "unsafe_f1_pct": 76.92,
+        "tn": 8,
+        "fp": 0,
+        "fn": 3,
+        "tp": 5,
+        "invalid_outputs": 1,
+        "invalid_output_rate_pct": 6.25
+      },
+      "mini_grpo": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 81.25,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 62.5,
+        "unsafe_f1_pct": 76.92,
+        "tn": 8,
+        "fp": 0,
+        "fn": 3,
+        "tp": 5,
+        "invalid_outputs": 1,
+        "invalid_output_rate_pct": 6.25
+      }
+    },
+    "compliance_response": {
+      "base": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 50.0,
+        "unsafe_precision_pct": 0.0,
+        "unsafe_recall_pct": 0.0,
+        "unsafe_f1_pct": 0.0,
+        "tn": 8,
+        "fp": 0,
+        "fn": 8,
+        "tp": 0,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      },
+      "sft": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 81.25,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 62.5,
+        "unsafe_f1_pct": 76.92,
+        "tn": 8,
+        "fp": 0,
+        "fn": 3,
+        "tp": 5,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      },
+      "mini_grpo": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 81.25,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 62.5,
+        "unsafe_f1_pct": 76.92,
+        "tn": 8,
+        "fp": 0,
+        "fn": 3,
+        "tp": 5,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      }
+    },
+    "injection": {
+      "base": {
+        "n": 200,
+        "gold_safe": 100,
+        "gold_unsafe": 100,
+        "accuracy_pct": 52.5,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 5.0,
+        "unsafe_f1_pct": 9.52,
+        "tn": 100,
+        "fp": 0,
+        "fn": 95,
+        "tp": 5,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      },
+      "sft": {
+        "n": 200,
+        "gold_safe": 100,
+        "gold_unsafe": 100,
+        "accuracy_pct": 99.5,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 99.0,
+        "unsafe_f1_pct": 99.5,
+        "tn": 100,
+        "fp": 0,
+        "fn": 1,
+        "tp": 99,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      },
+      "mini_grpo": {
+        "n": 200,
+        "gold_safe": 100,
+        "gold_unsafe": 100,
+        "accuracy_pct": 99.5,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 99.0,
+        "unsafe_f1_pct": 99.5,
+        "tn": 100,
+        "fp": 0,
+        "fn": 1,
+        "tp": 99,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      }
+    }
+  }
+}

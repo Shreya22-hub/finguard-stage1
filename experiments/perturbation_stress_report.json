@@ -1,0 +1,30 @@
+{
+  "Baseline (Unperturbed)": {
+    "total": 100,
+    "blocked": 100,
+    "evaded": 0,
+    "defense_rate_pct": 100.0,
+    "sample_evasions": []
+  },
+  "Leetspeak Substitutions": {
+    "total": 100,
+    "blocked": 100,
+    "evaded": 0,
+    "defense_rate_pct": 100.0,
+    "sample_evasions": []
+  },
+  "Typographical Noise": {
+    "total": 100,
+    "blocked": 100,
+    "evaded": 0,
+    "defense_rate_pct": 100.0,
+    "sample_evasions": []
+  },
+  "Delimiter Perturbation": {
+    "total": 100,
+    "blocked": 100,
+    "evaded": 0,
+    "defense_rate_pct": 100.0,
+    "sample_evasions": []
+  }
+}

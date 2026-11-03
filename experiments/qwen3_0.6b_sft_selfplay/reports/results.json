@@ -1,0 +1,170 @@
+{
+  "experiment": "Qwen3-0.6B full-data SFT with compliance-balanced continuation",
+  "base_model": "Qwen/Qwen3-0.6B",
+  "training_records_original": 10786,
+  "continuation_training_draws": 856,
+  "continuation_training_minutes": 3.82,
+  "adapter_path": "/content/finguard_qwen3_compliance_balanced_adapter",
+  "by_task": {
+    "compliance_query": {
+      "base": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 50.0,
+        "unsafe_precision_pct": 0.0,
+        "unsafe_recall_pct": 0.0,
+        "unsafe_f1_pct": 0.0,
+        "tn": 8,
+        "fp": 0,
+        "fn": 8,
+        "tp": 0,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      },
+      "sft": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 81.25,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 62.5,
+        "unsafe_f1_pct": 76.92,
+        "tn": 8,
+        "fp": 0,
+        "fn": 3,
+        "tp": 5,
+        "invalid_outputs": 1,
+        "invalid_output_rate_pct": 6.25
+      },
+      "sft_plus_mini_grpo": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 81.25,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 62.5,
+        "unsafe_f1_pct": 76.92,
+        "tn": 8,
+        "fp": 0,
+        "fn": 3,
+        "tp": 5,
+        "invalid_outputs": 1,
+        "invalid_output_rate_pct": 6.25
+      }
+    },
+    "compliance_response": {
+      "base": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 50.0,
+        "unsafe_precision_pct": 0.0,
+        "unsafe_recall_pct": 0.0,
+        "unsafe_f1_pct": 0.0,
+        "tn": 8,
+        "fp": 0,
+        "fn": 8,
+        "tp": 0,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      },
+      "sft": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 81.25,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 62.5,
+        "unsafe_f1_pct": 76.92,
+        "tn": 8,
+        "fp": 0,
+        "fn": 3,
+        "tp": 5,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      },
+      "sft_plus_mini_grpo": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 81.25,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 62.5,
+        "unsafe_f1_pct": 76.92,
+        "tn": 8,
+        "fp": 0,
+        "fn": 3,
+        "tp": 5,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      }
+    },
+    "injection": {
+      "base": {
+        "n": 200,
+        "gold_safe": 100,
+        "gold_unsafe": 100,
+        "accuracy_pct": 52.5,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 5.0,
+        "unsafe_f1_pct": 9.52,
+        "tn": 100,
+        "fp": 0,
+        "fn": 95,
+        "tp": 5,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      },
+      "sft": {
+        "n": 200,
+        "gold_safe": 100,
+        "gold_unsafe": 100,
+        "accuracy_pct": 99.5,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 99.0,
+        "unsafe_f1_pct": 99.5,
+        "tn": 100,
+        "fp": 0,
+        "fn": 1,
+        "tp": 99,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      },
+      "sft_plus_mini_grpo": {
+        "n": 200,
+        "gold_safe": 100,
+        "gold_unsafe": 100,
+        "accuracy_pct": 99.5,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 99.0,
+        "unsafe_f1_pct": 99.5,
+        "tn": 100,
+        "fp": 0,
+        "fn": 1,
+        "tp": 99,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      }
+    }
+  },
+  "mini_grpo": {
+    "method": "Constrained-label mini-GRPO-inspired update; binary action space; not full paper-scale GRPO; no reference-model KL",
+    "model": "Qwen/Qwen3-0.6B",
+    "episodes_requested": 24,
+    "group_size": 4,
+    "action_temperature": 2.0,
+    "learning_rate": 1e-06,
+    "retained_groups": 14,
+    "discarded_groups": 10,
+    "optimizer_updates": 14,
+    "adapter_path": "/content/finguard_qwen3_fixed_mini_grpo_adapter",
+    "final_note": "Small constrained-label GRPO-inspired experiment. Inspect generated queries for label alignment. It is not the paper's full GRPO run."
+  },
+  "paper_reference_only": {
+    "paper_query_unsafe_f1_pct_after_self_play": 90.23,
+    "paper_response_unsafe_f1_pct_after_self_play": 85.43,
+    "comparison_warning": "Not directly comparable: this run uses Qwen3-0.6B, a mixed injection/compliance training corpus, a 200-example injection test sample, and a 16-pair manual compliance smoke set; the paper evaluates Qwen3-8B on its 1,020-pair expert FinGuard-Bench."
+  },
+  "predictions_file_note": "Predictions contain base, SFT and SFT+mini-GRPO states, with task labels and invalid-output flags."
+}

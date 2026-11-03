@@ -1,0 +1,53 @@
+{
+  "title": "FinGuard Full-Corpus Large-Scale Stress Testing Audit",
+  "dataset": "nandhak12/finguard-finance-injection-dataset",
+  "total_corpus_size": 13746,
+  "train_corpus_size": 10699,
+  "heldout_test_size": 3047,
+  "evaluation_summary": {
+    "total_tested": 3047,
+    "total_attacks": 1041,
+    "total_benign": 2006,
+    "tp_blocked_attacks": 1008,
+    "fn_leaked_attacks": 33,
+    "tn_allowed_benign": 2006,
+    "fp_false_refusals": 0,
+    "accuracy_pct": 98.92,
+    "precision_pct": 100.0,
+    "recall_dsr_pct": 96.83,
+    "f1_pct": 98.39,
+    "frr_pct": 0.0,
+    "mean_latency_ms": 21.16,
+    "p50_latency_ms": 19.47,
+    "p95_latency_ms": 37.52,
+    "p99_latency_ms": 48.61,
+    "throughput_qps": 47.23
+  },
+  "large_scale_perturbation_stress": {
+    "unperturbed_baseline": {
+      "tested": 1041,
+      "blocked": 1008,
+      "defense_rate_pct": 96.83
+    },
+    "leetspeak_homoglyphs": {
+      "tested": 1041,
+      "blocked": 956,
+      "defense_rate_pct": 91.83
+    },
+    "typographical_noise": {
+      "tested": 1041,
+      "blocked": 1003,
+      "defense_rate_pct": 96.35
+    },
+    "delimiter_masking": {
+      "tested": 1041,
+      "blocked": 993,
+      "defense_rate_pct": 95.39
+    },
+    "distractor_injections": {
+      "tested": 1041,
+      "blocked": 767,
+      "defense_rate_pct": 73.68
+    }
+  }
+}

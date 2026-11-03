@@ -1,0 +1,153 @@
+{
+  "experiment": "FinGuard full HF injection SFT + regulatory multi-task pilot",
+  "base_model": "Qwen/Qwen3-0.6B",
+  "dataset_summary": {
+    "huggingface_dataset": "nandhak12/finguard-finance-injection-dataset",
+    "hf_train_raw_rows": 10699,
+    "hf_train_rows_after_exact_test_overlap_audit": 10618,
+    "hf_train_test_overlap_rows_removed": 81,
+    "hf_test_raw_rows_not_used_for_training": 3047,
+    "hf_injection_train_rows_used": 10618,
+    "canonical_sft_rows_total": 2168,
+    "canonical_regulatory_query_response_task_records_used": 168,
+    "canonical_injection_records_excluded_to_avoid_double_counting": 2000,
+    "final_training_rows": 10786,
+    "training_counts_by_task": {
+      "query": 84,
+      "response": 84,
+      "injection": 10618
+    },
+    "manual_compliance_demo_task_decisions": 32,
+    "hf_injection_test_eval_n": 200,
+    "hf_injection_test_eval_class_counts": {
+      "1": 100,
+      "0": 100
+    },
+    "seed": 42
+  },
+  "sft": {
+    "adapter_path": "/content/finguard_qwen3_full_sft_adapter",
+    "epochs": 1,
+    "learning_rate": 3e-05,
+    "lora": {
+      "r": 8,
+      "alpha": 16,
+      "dropout": 0.05,
+      "target_modules": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj"
+      ]
+    },
+    "task_weight_regulatory": 5.0,
+    "training_minutes": 43.48,
+    "train_metrics": {
+      "train_runtime": 2608.1289,
+      "train_samples_per_second": 4.124,
+      "train_steps_per_second": 0.516,
+      "total_flos": 5335277080412160.0,
+      "train_loss": 0.2307984779315367,
+      "epoch": 1.0
+    }
+  },
+  "evaluation_note": "HF injection test evaluated on a fixed stratified 200-example subset; regulatory metrics use a separately authored 16-pair smoke test, not the paper's expert benchmark.",
+  "by_task": {
+    "compliance_query": {
+      "base": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 50.0,
+        "unsafe_precision_pct": 50.0,
+        "unsafe_recall_pct": 100.0,
+        "unsafe_f1_pct": 66.67,
+        "tn": 0,
+        "fp": 8,
+        "fn": 0,
+        "tp": 8,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      },
+      "sft": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 50.0,
+        "unsafe_precision_pct": 0.0,
+        "unsafe_recall_pct": 0.0,
+        "unsafe_f1_pct": 0.0,
+        "tn": 8,
+        "fp": 0,
+        "fn": 8,
+        "tp": 0,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      }
+    },
+    "compliance_response": {
+      "base": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 50.0,
+        "unsafe_precision_pct": 50.0,
+        "unsafe_recall_pct": 100.0,
+        "unsafe_f1_pct": 66.67,
+        "tn": 0,
+        "fp": 8,
+        "fn": 0,
+        "tp": 8,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      },
+      "sft": {
+        "n": 16,
+        "gold_safe": 8,
+        "gold_unsafe": 8,
+        "accuracy_pct": 50.0,
+        "unsafe_precision_pct": 0.0,
+        "unsafe_recall_pct": 0.0,
+        "unsafe_f1_pct": 0.0,
+        "tn": 8,
+        "fp": 0,
+        "fn": 8,
+        "tp": 0,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      }
+    },
+    "injection": {
+      "base": {
+        "n": 200,
+        "gold_safe": 100,
+        "gold_unsafe": 100,
+        "accuracy_pct": 52.5,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 5.0,
+        "unsafe_f1_pct": 9.52,
+        "tn": 100,
+        "fp": 0,
+        "fn": 95,
+        "tp": 5,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      },
+      "sft": {
+        "n": 200,
+        "gold_safe": 100,
+        "gold_unsafe": 100,
+        "accuracy_pct": 99.5,
+        "unsafe_precision_pct": 100.0,
+        "unsafe_recall_pct": 99.0,
+        "unsafe_f1_pct": 99.5,
+        "tn": 100,
+        "fp": 0,
+        "fn": 1,
+        "tp": 99,
+        "invalid_outputs": 0,
+        "invalid_output_rate_pct": 0.0
+      }
+    }
+  }
+}

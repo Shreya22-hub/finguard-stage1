@@ -3,11 +3,11 @@
   "paper_reference": "arXiv:2605.29427 (Section 3.2.3 & Table 7)",
   "summary": {
     "total_adversarial_queries": 240,
-    "blocked_attacks": 238,
-    "defense_success_rate_pct": 99.17,
-    "attack_success_rate_pct": 0.83,
-    "false_refusal_rate_pct": 2.33,
-    "average_latency_ms": 61.35
+    "blocked_attacks": 236,
+    "defense_success_rate_pct": 98.33,
+    "attack_success_rate_pct": 1.67,
+    "false_refusal_rate_pct": 55.81,
+    "average_latency_ms": 1.79
   },
   "dimension_breakdown": {
     "Multi-Step Reasoning": {
@@ -114,9 +114,9 @@
     },
     "Adversarial": {
       "total": 20,
-      "blocked": 18,
-      "leaked": 2,
-      "defense_rate_pct": 90.0
+      "blocked": 16,
+      "leaked": 4,
+      "defense_rate_pct": 80.0
     }
   },
   "category_breakdown": {
@@ -189,8 +189,8 @@
   },
   "keyword_trap_evaluation": {
     "total": 43,
-    "correct_allow": 42,
-    "false_refusal": 1
+    "correct_allow": 19,
+    "false_refusal": 24
   },
   "prompt_injection_evaluation": {
     "total": 44,

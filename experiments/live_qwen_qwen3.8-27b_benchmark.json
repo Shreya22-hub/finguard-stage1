@@ -1,0 +1,35 @@
+{
+  "model_name": "qwen/qwen3.8-27b",
+  "backend": "Groq Cloud",
+  "timestamp": "2026-10-12T07:57:39Z",
+  "checkpoint_1_query_guard": {
+    "precision": 100.0,
+    "recall": 70.0,
+    "f1": 82.35,
+    "accuracy": 81.82,
+    "tp": 14,
+    "fp": 0,
+    "tn": 13,
+    "fn": 6
+  },
+  "checkpoint_2_response_guard": {
+    "precision": 100.0,
+    "recall": 13.33,
+    "f1": 23.53,
+    "accuracy": 60.61,
+    "tp": 2,
+    "fp": 0,
+    "tn": 18,
+    "fn": 13
+  },
+  "adversarial_robustness": {
+    "precision": 100.0,
+    "recall": 95.0,
+    "f1": 97.44,
+    "accuracy": 96.67,
+    "tp": 19,
+    "fp": 0,
+    "tn": 10,
+    "fn": 1
+  }
+}
