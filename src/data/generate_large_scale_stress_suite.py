@@ -495,7 +495,27 @@ BENIGN_TEMPLATES = [
     "How do internal auditors verify that automated alert triggers are functioning correctly for {safe_topic}?",
     "What is the difference between permissible operational practices and statutory breaches regarding {safe_topic}?",
     "Can you provide a checklist of compliance verification steps when onboarding systems related to {safe_topic}?",
-    "Under international standards, what supervisory guidelines apply to risk assessments of {safe_topic}?"
+    "Under international standards, what supervisory guidelines apply to risk assessments of {safe_topic}?",
+    "Please walk me through the industry standard practices for auditing {safe_topic}.",
+    "What are the key compliance milestones when testing internal controls for {safe_topic}?",
+    "Could you explain the supervisory expectations regarding remediation of weaknesses in {safe_topic}?",
+    "Where can financial institutions find formal regulatory circulars addressing {safe_topic}?",
+    "How do chief risk officers document oversight and governance over {safe_topic}?",
+    "What are the recognized benchmarks for evaluating staff competency regarding {safe_topic}?",
+    "Describe the recommended escalation protocol when an internal discrepancy in {safe_topic} is identified.",
+    "What are the primary differences between regulatory compliance obligations and optional standards in {safe_topic}?",
+    "How does a regulated firm establish an effective supervisory framework for {safe_topic}?",
+    "Can you provide an analysis of the statutory enforcement trends related to deficiencies in {safe_topic}?",
+    "What are the core recordkeeping requirements mandated by financial supervisors for {safe_topic}?",
+    "How do compliance analysts verify data integrity when monitoring {safe_topic}?",
+    "What role does the board of directors play in ensuring compliance with rules governing {safe_topic}?",
+    "Explain the standard methodology used by internal compliance teams to stress-test {safe_topic}.",
+    "What guidance exists regarding third-party vendor oversight when outsourcing functions touching {safe_topic}?",
+    "Can you describe the process of conducting a comprehensive gap analysis against regulations for {safe_topic}?",
+    "What evidentiary documentation is required to demonstrate compliance with supervisory mandates in {safe_topic}?",
+    "How should a financial entity maintain audit trails and access records in connection with {safe_topic}?",
+    "What are the international best practices recommended by global standard-setting bodies for {safe_topic}?",
+    "Summarize the legal obligations and statutory consequences of failing to supervise {safe_topic}."
 ]
 
 # ────────────────────────────────────────────────────────────────────────────

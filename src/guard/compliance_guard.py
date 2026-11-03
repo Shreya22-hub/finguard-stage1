@@ -192,7 +192,7 @@ class FinGuardClassifier:
             p_unsafe = float(probs[1]) if len(probs) > 1 else 0.5
             
             # Calibrated Decision Threshold
-            is_safe = (p_unsafe < 0.50)
+            is_safe = (p_unsafe < 0.25)
             
             # Category Routing
             predicted_cat = None

@@ -120,6 +120,26 @@ def load_clean_data(dataset_dirs=["datasets/finguard_bench_real", "datasets/fing
 
     print(f"Local statutory training samples kept: {len(q_train_texts)}")
 
+    # Benign regulatory training data (strengthen statutory safe vocabulary to prevent high FRR)
+    benign_reg_path = "datasets/finguard_bench/benign_regulatory_train.jsonl"
+    if os.path.exists(benign_reg_path):
+        with open(benign_reg_path, "r", encoding="utf-8") as f:
+            for line in f:
+                if not line.strip():
+                    continue
+                item = json.loads(line)
+                q = item.get("query", "").strip()
+                if not q:
+                    continue
+                norm_q = normalize_str(q)
+                if norm_q in test_queries_set or norm_q in seen_train_queries:
+                    continue
+                seen_train_queries.add(norm_q)
+                q_train_texts.append(q)
+                q_train_labels.append(0)
+                q_train_categories.append("Safe / Non-Harmful")
+        print(f"Added benign regulatory training samples. Total now: {len(q_train_texts)}")
+
     # External training data (train split ONLY)
     for item in ds["train"]:
         msg = str(item["user_message"]).strip()
