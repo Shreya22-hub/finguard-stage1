@@ -302,7 +302,8 @@ def build_full_report_pdf(output_filename="FinGuard_Stress_Testing_Report_A_to_Z
     story.append(PageBreak())
 
     # Section 4 uses large_scale table7 data
-    story.append(Paragraph("4. Large-Scale Adversarial Stress Suite: 1,925 Samples (110 per Dimension)", h1_style))
+    t7_total_val = table7_data.get("total_samples", 5610)
+    story.append(Paragraph(f"4. Large-Scale Adversarial Stress Suite: {t7_total_val:,} Samples", h1_style))
     story.append(HRFlowable(width="100%", thickness=1, color=c_accent, spaceBefore=1, spaceAfter=6))
     
     t7_summary = table7_data.get("dimension_breakdown", {})

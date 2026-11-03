@@ -29,10 +29,12 @@ class RegulatoryRetriever:
         """
         Build a TF-IDF representation of the regulatory clauses.
         """
-        documents = [
-            (clause["title"] + " " + clause["text"]).lower()
-            for clause in self.clauses
-        ]
+        documents = []
+        for clause in self.clauses:
+            title = clause.get("title") or clause.get("heading") or clause.get("document", "")
+            text = clause.get("text", "")
+            section = clause.get("section", "")
+            documents.append((f"{title} {section} {text}").lower())
 
         self.vectorizer = TfidfVectorizer()
         self.clause_vectors = self.vectorizer.fit_transform(documents)
@@ -62,7 +64,5 @@ if __name__ == "__main__":
     retriever = RegulatoryRetriever()
     results = retriever.retrieve("insider trading earnings disclosure")
 
-    print(
-        "Retrieved top clause:",
-        results[0]["title"] if results else "None"
-    )
+    top_title = results[0].get("title", results[0].get("heading", "None")) if results else "None"
+    print("Retrieved top clause:", top_title)
