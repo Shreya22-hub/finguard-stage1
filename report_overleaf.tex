@@ -745,7 +745,71 @@ Benign Educational Control (FRR) & 385 & \textbf{0.00\% FRR} & -- & -- & $<$5.0\
 \label{tab:table7_full_breakdown}
 \end{table}
 
-\noindent\textbf{Key Finding on Euphemistic Camouflage:} Open-weight guards such as Llama-Guard-3 collapse from 38.4\% to below 20\% when prompts are camouflaged with financial slang (e.g., dropping to 18.5\% on Boundary Probing + Euphemism). In contrast, FinGuard maintains \textbf{95.29\% to 100.00\%} DSR across all euphemism variants due to its calibrated keyword-intent representation.
+\noindent\textbf{Key Finding on Euphemistic Camouflage:} Open-weight guards such as Llama-Guard-3 collapse from 38.4\% to below 20\% when prompts are camouflaged with financial slang (e.g., dropping to 18.5\% on Boundary Probing + Euphemism). In contrast, FinGuard maintains \textbf{95.29\% to 100.00\%} DSR across all euphemism variants due to its calibrated keyword-intent representation, as detailed across the 18 attack vectors in Figure~\ref{fig:multidimensional_stress}.
+
+\begin{figure}[H]
+\centering
+\IfFileExists{plots/multidimensional_adversarial_suite.jpg}{%
+    \includegraphics[width=0.92\textwidth]{plots/multidimensional_adversarial_suite.jpg}
+}{%
+    \begin{tikzpicture}
+        \node[draw=headerblue, fill=calloutbg, rounded corners=6pt, inner sep=12pt, text width=0.88\textwidth, align=left] {
+            \textbf{\color{headerblue}Stage 2: Defense Success Rate Across 10,010 Multi-Dimensional Attacks (arXiv:2605.29427 Table 10 Taxonomy)}\\[4pt]
+            \small
+            \begin{itemize}[noitemsep,leftmargin=1.5em]
+                \item \textbf{Top Defense Resiliencies ($\ge 94\%$):} Prompt Injection Overrides (97.7\%), Multi-Step Reasoning + Euphemism (96.5\%), Process Obfuscation + Euphemism (96.2\%), Distractor Injection + Euphemism (94.1\%).
+                \item \textbf{Mid-Range Resistance ($72\% - 87\%$):} Multi-Step Reasoning Raw (86.6\%), Process Obfuscation Raw (86.1\%), Nested Crisis Scenarios (83.0\%), Perturbation Stress (81.2\%), Reverse Elicitation (80.5\%), Distractor Injection Raw (78.0\%), Jargon Camouflage (75.1\%--76.9\%), Insider Role-Playing Raw (72.2\%).
+                \item \textbf{Vulnerable Vectors ($< 70\%$):} Nested Scenario + Euphemism (67.3\%), Insider Role-Playing + Euphemism (62.4\%), Boundary Probing Limits (55.9\%), Boundary Probing + Euphemism (34.1\%).
+                \item \textbf{Mean Attack Defense Success Rate:} \textbf{76.90\%} across all 18 variations.
+            \end{itemize}
+        };
+    \end{tikzpicture}
+}
+\caption{Defense Success Rate across the 18 Attack Variations in the Multi-Dimensional Adversarial Stress Suite (arXiv:2605.29427 Table 10 Taxonomy).}
+\label{fig:multidimensional_stress}
+\end{figure}
+
+\subsection{Syntactic and Character-Level Perturbation Stress (4,164 Evaluations)}
+To evaluate whether adversaries can defeat tokenization using orthographic disguise, all 1,041 held-out attack prompts were evaluated across four automated perturbation transformations on Qwen3-0.6B (Typographical Noise, Delimiter Masking, Leetspeak, and Distractor Prefixes). As shown in Figure~\ref{fig:perturbation_stress}, FinGuard maintains robust defense across character manipulations ($\ge 91.8\%$), with distractor boilerplate prefixes forming the lowest defense rate (73.7\%).
+
+\begin{figure}[H]
+\centering
+\IfFileExists{plots/perturbation_stress_defense.jpg}{%
+    \includegraphics[width=0.88\textwidth]{plots/perturbation_stress_defense.jpg}
+}{%
+    \begin{tikzpicture}[xscale=1.5, yscale=0.045]
+        \draw[thick, ->] (0,0) -- (6.2,0);
+        \draw[thick, ->] (0,0) -- (0,110) node[above, font=\footnotesize] {Attack Defense Rate (\%)};
+        \foreach \y in {0, 20, 40, 60, 80, 100} {
+            \draw (0,\y) -- (-0.1,\y) node[left, font=\scriptsize] {\y};
+            \draw[dotted, gray!30] (0,\y) -- (6.0,\y);
+        }
+        % Bar 1: Unperturbed Baseline (96.8%)
+        \fill[headerblue!90!black] (0.5,0) rectangle (1.2, 96.8);
+        \node[above, font=\scriptsize\bfseries] at (0.85, 96.8) {96.8\%};
+        \node[below=6pt, font=\scriptsize, rotate=20, align=right] at (0.85,0) {Unperturbed Baseline};
+        % Bar 2: Typographical Noise (96.3%)
+        \fill[RoyalBlue!90!black] (1.6,0) rectangle (2.3, 96.3);
+        \node[above, font=\scriptsize\bfseries] at (1.95, 96.3) {96.3\%};
+        \node[below=6pt, font=\scriptsize, rotate=20, align=right] at (1.95,0) {Typographical Noise};
+        % Bar 3: Delimiter Masking (95.4%)
+        \fill[RoyalBlue!90!black] (2.7,0) rectangle (3.4, 95.4);
+        \node[above, font=\scriptsize\bfseries] at (3.05, 95.4) {95.4\%};
+        \node[below=6pt, font=\scriptsize, rotate=20, align=right] at (3.05,0) {Delimiter Masking};
+        % Bar 4: Leetspeak (91.8%)
+        \fill[RoyalBlue!70!cyan] (3.8,0) rectangle (4.5, 91.8);
+        \node[above, font=\scriptsize\bfseries] at (4.15, 91.8) {91.8\%};
+        \node[below=6pt, font=\scriptsize, rotate=20, align=right] at (4.15,0) {Leetspeak ($e\to 3, a\to @$)};
+        % Bar 5: Distractor Prefix (73.7%)
+        \fill[metricred] (4.9,0) rectangle (5.6, 73.7);
+        \node[above, font=\scriptsize\bfseries] at (5.25, 73.7) {73.7\%};
+        \node[below=6pt, font=\scriptsize, rotate=20, align=right] at (5.25,0) {Distractor Prefix};
+        \node[above, font=\small\bfseries] at (3.1, 112) {Syntactic \& Character-Level Perturbation Stress (4,164 Live Evaluations)};
+    \end{tikzpicture}
+}
+\caption{Syntactic and Character-Level Perturbation Defense across 4,164 Live Stress Evaluations on Qwen3-0.6B.}
+\label{fig:perturbation_stress}
+\end{figure}
 
 \subsection{Cross-Jurisdiction Adaptation Results (SEBI \& RBI)}
 Evaluating zero-shot transfer on statutory scenarios across Insider Trading (SEBI PIT), Market Manipulation (SEBI PFUTP), Pre-Trade Algo Controls, and AML (PMLA) yielded:
