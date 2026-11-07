@@ -192,7 +192,7 @@ class FinGuardClassifier:
             p_unsafe = float(probs[1]) if len(probs) > 1 else 0.5
             
             # Calibrated Decision Threshold
-            is_safe = (p_unsafe < 0.50)
+            is_safe = (p_unsafe < 0.25)
             
             # Category Routing
             predicted_cat = None
@@ -235,6 +235,33 @@ class FinGuardClassifier:
     def predict_response(self, query, response):
         """
         Checkpoint 2: Response Guard (Table 5 evaluation)
+        Evaluates whether an assistant's response contains non-compliant advice or execution details,
+        conditioned on the query context (Section 3.1 & Table 4 in arXiv:2605.29427).
         """
-        combined = f"{query} {response}"
+        if self.trained_bundle and "response_guard" in self.trained_bundle:
+            r_guard = self.trained_bundle["response_guard"]
+            qr_ctx = f"Query: {query} | Response: {response}"
+            probs = r_guard.predict_proba([qr_ctx])[0] if hasattr(r_guard, "predict_proba") else [0.5, 0.5]
+            p_unsafe = float(probs[1]) if len(probs) > 1 else 0.5
+            is_safe = (p_unsafe < 0.25)
+            
+            cat_router = self.trained_bundle.get("category_router")
+            predicted_cat = None
+            if not is_safe and cat_router is not None:
+                try:
+                    c_out = cat_router.predict([qr_ctx])[0]
+                    predicted_cat = c_out
+                except Exception:
+                    predicted_cat = "Non-Compliant Response Content"
+
+            return {
+                "is_safe": is_safe,
+                "label": "safe" if is_safe else "unsafe",
+                "category": predicted_cat,
+                "confidence": round(float(p_unsafe) if not is_safe else float(1.0 - p_unsafe), 4),
+                "p_unsafe": round(p_unsafe, 4)
+            }
+
+        # Fallback to general predict
+        combined = f"Query: {query} | Response: {response}"
         return self.predict(combined)

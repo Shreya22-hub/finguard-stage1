@@ -5,7 +5,7 @@ A-to-Z Stress Testing & Adversarial Robustness evaluation performed on FinGuard,
 including:
 1. The 13,746-sample corpus (10,699 trained, 3,047 full-scale held-out stress tested).
 2. Large-scale adversarial perturbations across all 1,041 attacks (Leetspeak, Typos, Delimiters, Distractors).
-3. The Table 7 targeted multi-dimensional stress suite (240 attacks, 6 dimensions).
+3. The Table 10 targeted multi-dimensional adversarial stress suite (8 dimensions + euphemisms).
 4. Concurrency & Throughput Stress Testing (1 to 50 concurrent workers, 1,250 requests).
 5. False Refusal Rate (FRR) calibration on real-world benign edge cases.
 """
@@ -203,7 +203,7 @@ def build_full_report_pdf(output_filename="FinGuard_Stress_Testing_Report_A_to_Z
     story.append(Paragraph(
         "To provide a complete, uncompromising audit of the FinGuard compliance guardrail, evaluations were performed at two complementary tiers: "
         "(1) <b>Full-Corpus Stress Testing</b> across all 3,047 held-out test queries from the 13,746-sample financial injection corpus, and "
-        "(2) <b>Targeted Adversarial Stress Testing</b> across the 6 evasion dimensions of Table 7 in arXiv:2605.29427.",
+        "(2) <b>Targeted Adversarial Stress Testing</b> across the 8 adversarial evasion dimensions defined in Table 10 of arXiv:2605.29427.",
         body_style
     ))
 
@@ -540,7 +540,7 @@ def build_full_report_pdf(output_filename="FinGuard_Stress_Testing_Report_A_to_Z
     arch_box_text = (
         "<b>Exact Commands to Reproduce All Stress Tests in this Branch:</b><br/>"
         "• <b>Full 3,047-Sample Corpus Stress Test:</b> <code>python src/evaluation/run_full_scale_stress_test.py</code><br/>"
-        "• <b>Table 7 Multi-Dimensional Stress Suite:</b> <code>python src/evaluation/stress_testing.py</code><br/>"
+        "• <b>Table 10 Multi-Dimensional Stress Suite:</b> <code>python src/evaluation/stress_testing.py</code><br/>"
         "• <b>Concurrency & Load Stress Harness:</b> <code>python src/evaluation/stress_test_concurrency.py</code><br/>"
         "• <b>Character & Syntactic Perturbations:</b> <code>python src/evaluation/stress_test_perturbation.py</code><br/>"
         "• <b>Real-World False Refusal Rate Audit:</b> <code>python src/evaluation/evaluate_true_frr.py</code><br/><br/>"
