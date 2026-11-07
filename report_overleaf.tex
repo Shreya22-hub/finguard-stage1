@@ -343,16 +343,17 @@ The fine-tuning configuration used for the Qwen3-0.6B LoRA adapter is detailed i
 \begin{table}[h!]
 \centering
 \small
-\begin{tabularx}{\textwidth}{>{\bfseries\color{headerblue}}p{3.8cm} X >{\bfseries\color{headerblue}}p{3.8cm} X}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{>{\bfseries\color{headerblue}\raggedright\arraybackslash}p{4.2cm} >{\raggedright\arraybackslash}p{3.8cm} >{\bfseries\color{headerblue}\raggedright\arraybackslash}p{4.2cm} >{\raggedright\arraybackslash}X}
 \toprule
 \rowcolor{tableheader} \textcolor{white}{Hyperparameter} & \textcolor{white}{Configured Value} & \textcolor{white}{Hyperparameter} & \textcolor{white}{Configured Value} \\
 \midrule
-Base Model Architecture & Qwen/Qwen3-0.6B & LoRA Target Projections & \nolinkurl{q_proj, k_proj, v_proj, o_proj} \\
-LoRA Rank ($r$) / Scaling ($\alpha$) & $r = 8$, $\alpha = 16$ & LoRA Dropout Rate & 0.05 \\
-Optimizer / Scheduler & AdamW / Cosine Annealing & Initial Learning Rate & $3.0 \times 10^{-5}$ \\
-Batch Size / Gradient Accumulation & 1 / 8 (Effective batch: 8) & Precision / Seed & FP16 Mixed Precision / Seed 42 \\
-Total Optimizer Steps & 1,345 steps & Final Training Loss & 0.2308 (43.5 min runtime) \\
-Loss Reweighting Factor & $5.0\times$ on compliance records & Sequence Length ($L_{\max}$) & 1,536 tokens \\
+Base Model Architecture & Qwen/Qwen3-0.6B & Target Projections & \texttt{q, k, v, o\_proj} \\
+LoRA Rank / Scaling & $r = 8$, $\alpha = 16$ & LoRA Dropout Rate & 0.05 \\
+Optimizer / Schedule & AdamW / Cosine Decay & Initial Learning Rate & $3.0 \times 10^{-5}$ \\
+Batch Configuration & 1 / 8 (Effective batch: 8) & Training Precision & FP16 (Seed: 42) \\
+Total Optimizer Steps & 1,345 steps & Final Training Loss & 0.2308 (43.5 min) \\
+Loss Reweighting & $5.0\times$ (compliance task) & Max Sequence Length & 1,536 tokens \\
 \bottomrule
 \end{tabularx}
 \caption{LoRA Fine-Tuning Hyperparameters for Qwen3-0.6B on the Assembled Corpus.}
