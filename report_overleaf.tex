@@ -752,17 +752,113 @@ Benign Educational Control (FRR) & 385 & \textbf{0.00\% FRR} & -- & -- & $<$5.0\
 \IfFileExists{plots/multidimensional_adversarial_suite.jpg}{%
     \includegraphics[width=0.92\textwidth]{plots/multidimensional_adversarial_suite.jpg}
 }{%
-    \begin{tikzpicture}
-        \node[draw=headerblue, fill=calloutbg, rounded corners=6pt, inner sep=12pt, text width=0.88\textwidth, align=left] {
-            \textbf{\color{headerblue}Stage 2: Defense Success Rate Across 10,010 Multi-Dimensional Attacks (arXiv:2605.29427 Table 10 Taxonomy)}\\[4pt]
-            \small
-            \begin{itemize}[noitemsep,leftmargin=1.5em]
-                \item \textbf{Top Defense Resiliencies ($\ge 94\%$):} Prompt Injection Overrides (97.7\%), Multi-Step Reasoning + Euphemism (96.5\%), Process Obfuscation + Euphemism (96.2\%), Distractor Injection + Euphemism (94.1\%).
-                \item \textbf{Mid-Range Resistance ($72\% - 87\%$):} Multi-Step Reasoning Raw (86.6\%), Process Obfuscation Raw (86.1\%), Nested Crisis Scenarios (83.0\%), Perturbation Stress (81.2\%), Reverse Elicitation (80.5\%), Distractor Injection Raw (78.0\%), Jargon Camouflage (75.1\%--76.9\%), Insider Role-Playing Raw (72.2\%).
-                \item \textbf{Vulnerable Vectors ($< 70\%$):} Nested Scenario + Euphemism (67.3\%), Insider Role-Playing + Euphemism (62.4\%), Boundary Probing Limits (55.9\%), Boundary Probing + Euphemism (34.1\%).
-                \item \textbf{Mean Attack Defense Success Rate:} \textbf{76.90\%} across all 18 variations.
-            \end{itemize}
-        };
+    \begin{tikzpicture}[xscale=1.0, yscale=0.42]
+        % Frame and Grid
+        \draw[gray!40] (0, 0.3) rectangle (8.0, 19.0);
+        \foreach \x/\label in {0/0, 1.6/20, 3.2/40, 4.8/60, 6.4/80, 8.0/100} {
+            \draw[dotted, gray!35] (\x, 0.3) -- (\x, 19.0);
+            \draw (\x, 0.3) -- (\x, 0.0) node[below, font=\scriptsize] {\label};
+        }
+        \node[below=14pt, font=\scriptsize\bfseries] at (4.0, 0.0) {Defense Success Rate (\%)};
+
+        % 18 Horizontal Bars (from bottom to top)
+        % y = 1: Boundary Probing + Euph. (34.1%)
+        \fill[metricred] (0, 0.65) rectangle (2.728, 1.35);
+        \node[anchor=east, font=\tiny] at (-0.15, 1.0) {Boundary Probing + Euph.};
+        \node[anchor=west, font=\tiny\bfseries] at (2.78, 1.0) {34.1\%};
+
+        % y = 2: Boundary Probing (Limits) (55.9%)
+        \fill[Orange!90!black] (0, 1.65) rectangle (4.472, 2.35);
+        \node[anchor=east, font=\tiny] at (-0.15, 2.0) {Boundary Probing (Limits)};
+        \node[anchor=west, font=\tiny\bfseries] at (4.52, 2.0) {55.9\%};
+
+        % y = 3: Insider Role-Playing + Euph. (62.4%)
+        \fill[Orange!90!black] (0, 2.65) rectangle (4.992, 3.35);
+        \node[anchor=east, font=\tiny] at (-0.15, 3.0) {Insider Role-Playing + Euph.};
+        \node[anchor=west, font=\tiny\bfseries] at (5.04, 3.0) {62.4\%};
+
+        % y = 4: Nested Scenario + Euph. (67.3%)
+        \fill[Orange!90!black] (0, 3.65) rectangle (5.384, 4.35);
+        \node[anchor=east, font=\tiny] at (-0.15, 4.0) {Nested Scenario + Euph.};
+        \node[anchor=west, font=\tiny\bfseries] at (5.43, 4.0) {67.3\%};
+
+        % y = 5: Insider Role-Playing (Raw) (72.2%)
+        \fill[RoyalBlue!90!black] (0, 4.65) rectangle (5.776, 5.35);
+        \node[anchor=east, font=\tiny] at (-0.15, 5.0) {Insider Role-Playing (Raw)};
+        \node[anchor=west, font=\tiny\bfseries] at (5.82, 5.0) {72.2\%};
+
+        % y = 6: Jargon Camouflage (Raw) (75.1%)
+        \fill[RoyalBlue!90!black] (0, 5.65) rectangle (6.008, 6.35);
+        \node[anchor=east, font=\tiny] at (-0.15, 6.0) {Jargon Camouflage (Raw)};
+        \node[anchor=west, font=\tiny\bfseries] at (6.05, 6.0) {75.1\%};
+
+        % y = 7: Reverse Elicitation + Euph. (76.2%)
+        \fill[RoyalBlue!90!black] (0, 6.65) rectangle (6.096, 7.35);
+        \node[anchor=east, font=\tiny] at (-0.15, 7.0) {Reverse Elicitation + Euph.};
+        \node[anchor=west, font=\tiny\bfseries] at (6.14, 7.0) {76.2\%};
+
+        % y = 8: Jargon Camouflage + Euph. (76.9%)
+        \fill[RoyalBlue!90!black] (0, 7.65) rectangle (6.152, 8.35);
+        \node[anchor=east, font=\tiny] at (-0.15, 8.0) {Jargon Camouflage + Euph.};
+        \node[anchor=west, font=\tiny\bfseries] at (6.20, 8.0) {76.9\%};
+
+        % y = 9: Distractor Injection (Raw) (78.0%)
+        \fill[RoyalBlue!90!black] (0, 8.65) rectangle (6.240, 9.35);
+        \node[anchor=east, font=\tiny] at (-0.15, 9.0) {Distractor Injection (Raw)};
+        \node[anchor=west, font=\tiny\bfseries] at (6.28, 9.0) {78.0\%};
+
+        % y = 10: Reverse Elicitation (Auditor) (80.5%)
+        \fill[RoyalBlue!90!black] (0, 9.65) rectangle (6.440, 10.35);
+        \node[anchor=east, font=\tiny] at (-0.15, 10.0) {Reverse Elicitation (Auditor)};
+        \node[anchor=west, font=\tiny\bfseries] at (6.48, 10.0) {80.5\%};
+
+        % y = 11: Perturbation Stress (Noise) (81.2%)
+        \fill[RoyalBlue!90!black] (0, 10.65) rectangle (6.496, 11.35);
+        \node[anchor=east, font=\tiny] at (-0.15, 11.0) {Perturbation Stress (Noise)};
+        \node[anchor=west, font=\tiny\bfseries] at (6.54, 11.0) {81.2\%};
+
+        % y = 12: Nested Scenario (Crisis) (83.0%)
+        \fill[RoyalBlue!90!black] (0, 11.65) rectangle (6.640, 12.35);
+        \node[anchor=east, font=\tiny] at (-0.15, 12.0) {Nested Scenario (Crisis)};
+        \node[anchor=west, font=\tiny\bfseries] at (6.68, 12.0) {83.0\%};
+
+        % y = 13: Process Obfuscation (Raw) (86.1%)
+        \fill[ForestGreen!85!black] (0, 12.65) rectangle (6.888, 13.35);
+        \node[anchor=east, font=\tiny] at (-0.15, 13.0) {Process Obfuscation (Raw)};
+        \node[anchor=west, font=\tiny\bfseries] at (6.93, 13.0) {86.1\%};
+
+        % y = 14: Multi-Step Reasoning (Raw) (86.6%)
+        \fill[ForestGreen!85!black] (0, 13.65) rectangle (6.928, 14.35);
+        \node[anchor=east, font=\tiny] at (-0.15, 14.0) {Multi-Step Reasoning (Raw)};
+        \node[anchor=west, font=\tiny\bfseries] at (6.97, 14.0) {86.6\%};
+
+        % y = 15: Distractor Injection + Euph. (94.1%)
+        \fill[ForestGreen!85!black] (0, 14.65) rectangle (7.528, 15.35);
+        \node[anchor=east, font=\tiny] at (-0.15, 15.0) {Distractor Injection + Euph.};
+        \node[anchor=west, font=\tiny\bfseries] at (7.57, 15.0) {94.1\%};
+
+        % y = 16: Process Obfuscation + Euph. (96.2%)
+        \fill[ForestGreen!85!black] (0, 15.65) rectangle (7.696, 16.35);
+        \node[anchor=east, font=\tiny] at (-0.15, 16.0) {Process Obfuscation + Euph.};
+        \node[anchor=west, font=\tiny\bfseries] at (7.74, 16.0) {96.2\%};
+
+        % y = 17: Multi-Step Reasoning + Euph. (96.5%)
+        \fill[ForestGreen!85!black] (0, 16.65) rectangle (7.720, 17.35);
+        \node[anchor=east, font=\tiny] at (-0.15, 17.0) {Multi-Step Reasoning + Euph.};
+        \node[anchor=west, font=\tiny\bfseries] at (7.76, 17.0) {96.5\%};
+
+        % y = 18: Prompt Injection (Overrides) (97.7%)
+        \fill[ForestGreen!85!black] (0, 17.65) rectangle (7.816, 18.35);
+        \node[anchor=east, font=\tiny] at (-0.15, 18.0) {Prompt Injection (Overrides)};
+        \node[anchor=west, font=\tiny\bfseries] at (7.86, 18.0) {97.7\%};
+
+        % Mean Dotted Line & Legend
+        \draw[dashed, gray!80, thick] (6.152, 0.3) -- (6.152, 19.0);
+        \node[anchor=east, font=\tiny, draw=gray!40, fill=white, inner sep=2.5pt] at (7.9, 2.5) {- - - Mean Attack Defense: 76.90\%};
+
+        % Clean Titles Above
+        \node[above=8pt, font=\small\bfseries\color{headerblue}] at (4.0, 19.0) {Stage 2: Defense Success Rate Across 10,010 Multi-Dimensional Attacks};
+        \node[above=0pt, font=\scriptsize\color{gray}] at (4.0, 19.0) {(arXiv:2605.29427 Table 10 Taxonomy)};
     \end{tikzpicture}
 }
 \caption{Defense Success Rate across the 18 Attack Variations in the Multi-Dimensional Adversarial Stress Suite (arXiv:2605.29427 Table 10 Taxonomy).}
@@ -777,34 +873,37 @@ To evaluate whether adversaries can defeat tokenization using orthographic disgu
 \IfFileExists{plots/perturbation_stress_defense.jpg}{%
     \includegraphics[width=0.88\textwidth]{plots/perturbation_stress_defense.jpg}
 }{%
-    \begin{tikzpicture}[xscale=1.5, yscale=0.045]
-        \draw[thick, ->] (0,0) -- (6.2,0);
-        \draw[thick, ->] (0,0) -- (0,110) node[above, font=\footnotesize] {Attack Defense Rate (\%)};
+    \begin{tikzpicture}[xscale=1.45, yscale=0.045]
+        \draw[thick, ->] (0,0) -- (6.1,0);
+        \draw[thick, ->] (0,0) -- (0,105);
+        \node[rotate=90, font=\footnotesize\bfseries, anchor=south] at (-0.75, 50) {Attack Defense Rate (\%)};
         \foreach \y in {0, 20, 40, 60, 80, 100} {
             \draw (0,\y) -- (-0.1,\y) node[left, font=\scriptsize] {\y};
-            \draw[dotted, gray!30] (0,\y) -- (6.0,\y);
+            \draw[dotted, gray!30] (0,\y) -- (5.9,\y);
         }
         % Bar 1: Unperturbed Baseline (96.8%)
         \fill[headerblue!90!black] (0.5,0) rectangle (1.2, 96.8);
         \node[above, font=\scriptsize\bfseries] at (0.85, 96.8) {96.8\%};
-        \node[below=6pt, font=\scriptsize, rotate=20, align=right] at (0.85,0) {Unperturbed Baseline};
+        \node[below=6pt, font=\scriptsize, rotate=25, anchor=north east] at (0.85,0) {Unperturbed Baseline};
         % Bar 2: Typographical Noise (96.3%)
         \fill[RoyalBlue!90!black] (1.6,0) rectangle (2.3, 96.3);
         \node[above, font=\scriptsize\bfseries] at (1.95, 96.3) {96.3\%};
-        \node[below=6pt, font=\scriptsize, rotate=20, align=right] at (1.95,0) {Typographical Noise};
+        \node[below=6pt, font=\scriptsize, rotate=25, anchor=north east] at (1.95,0) {Typographical Noise};
         % Bar 3: Delimiter Masking (95.4%)
         \fill[RoyalBlue!90!black] (2.7,0) rectangle (3.4, 95.4);
         \node[above, font=\scriptsize\bfseries] at (3.05, 95.4) {95.4\%};
-        \node[below=6pt, font=\scriptsize, rotate=20, align=right] at (3.05,0) {Delimiter Masking};
+        \node[below=6pt, font=\scriptsize, rotate=25, anchor=north east] at (3.05,0) {Delimiter Masking};
         % Bar 4: Leetspeak (91.8%)
         \fill[RoyalBlue!70!cyan] (3.8,0) rectangle (4.5, 91.8);
         \node[above, font=\scriptsize\bfseries] at (4.15, 91.8) {91.8\%};
-        \node[below=6pt, font=\scriptsize, rotate=20, align=right] at (4.15,0) {Leetspeak ($e\to 3, a\to @$)};
+        \node[below=6pt, font=\scriptsize, rotate=25, anchor=north east] at (4.15,0) {Leetspeak ($e\to 3, a\to @$)};
         % Bar 5: Distractor Prefix (73.7%)
         \fill[metricred] (4.9,0) rectangle (5.6, 73.7);
         \node[above, font=\scriptsize\bfseries] at (5.25, 73.7) {73.7\%};
-        \node[below=6pt, font=\scriptsize, rotate=20, align=right] at (5.25,0) {Distractor Prefix};
-        \node[above, font=\small\bfseries] at (3.1, 112) {Syntactic \& Character-Level Perturbation Stress (4,164 Live Evaluations)};
+        \node[below=6pt, font=\scriptsize, rotate=25, anchor=north east] at (5.25,0) {Distractor Prefix};
+        % Clean Title Above
+        \node[above=8pt, font=\small\bfseries\color{headerblue}] at (3.05, 105) {Syntactic \& Character-Level Perturbation Stress};
+        \node[above=0pt, font=\scriptsize\color{gray}] at (3.05, 105) {(4,164 Live Evaluations on Qwen3-0.6B)};
     \end{tikzpicture}
 }
 \caption{Syntactic and Character-Level Perturbation Defense across 4,164 Live Stress Evaluations on Qwen3-0.6B.}
