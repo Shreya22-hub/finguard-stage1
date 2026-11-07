@@ -193,12 +193,13 @@ The core methodology proposed in the FinGuard paper (arXiv:2605.29427) is a **du
 \centering
 \begin{tikzpicture}[
     >=Latex,
+    execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000},
     procblock/.style={
         rectangle, 
         draw=headerblue, 
         fill=calloutbg, 
         line width=1.1pt, 
-        text width=7.2cm, 
+        text width=7.6cm, 
         align=center, 
         rounded corners=4pt, 
         inner sep=7pt
@@ -218,7 +219,7 @@ The core methodology proposed in the FinGuard paper (arXiv:2605.29427) is a **du
         draw=metricred, 
         fill=metricred!8, 
         line width=1.1pt, 
-        text width=4.4cm, 
+        text width=4.6cm, 
         align=center, 
         rounded corners=4pt, 
         inner sep=6pt
@@ -228,7 +229,7 @@ The core methodology proposed in the FinGuard paper (arXiv:2605.29427) is a **du
         draw=metricgreen!85!black, 
         fill=metricgreen!12, 
         line width=1.2pt, 
-        text width=7.2cm, 
+        text width=7.6cm, 
         align=center, 
         rounded corners=4pt, 
         inner sep=7pt
@@ -253,39 +254,39 @@ The core methodology proposed in the FinGuard paper (arXiv:2605.29427) is a **du
     
     \node [procblock, below=0.6cm of input] (cp1) {
         \textbf{\large Checkpoint 1: Query Guard}\\[3pt]
-        \footnotesize Intent Classifier $\bullet$ Prompt Injection Filter $\bullet$ Keyword Trap
+        \footnotesize Pre-Generation Intent Classification Head $\bullet$ Prompt Injection Trap
     };
     
     \node [decision, below=0.7cm of cp1] (dec1) {
         Compliant?
     };
     
-    \node [refusal, right=1.2cm of dec1] (block1) {
-        \textbf{\textcolor{metricred}{Policy Refusal}}\\[2pt]
+    \node [refusal, right=1.8cm of dec1] (block1) {
+        \textbf{\textcolor{metricred}{\large Policy Refusal}}\\[2pt]
         \footnotesize Immediate halt with specific statutory clause citation
     };
     
     \node [procblock, below=0.7cm of dec1] (rag) {
-        \textbf{\large Statutory Retrieval (RAG)}\\[3pt]
-        \footnotesize Dual-Regime: US SEC/CFTC or Global Statutory Corpus
+        \textbf{\large Dual-Regime Statutory Retrieval (RAG)}\\[3pt]
+        \footnotesize Contextual search over US SEC/CFTC or Indian SEBI/RBI corpus
     };
     
     \node [procblock, below=0.6cm of rag] (synth) {
-        \textbf{\large Response Synthesis}\\[3pt]
-        \footnotesize Grounded reply generation anchored strictly in regulatory text
+        \textbf{\large Policy-Grounded Response Synthesis}\\[3pt]
+        \footnotesize Generates response conditioned on retrieved regulatory clauses
     };
     
     \node [procblock, below=0.6cm of synth] (cp2) {
         \textbf{\large Checkpoint 2: Response Guard}\\[3pt]
-        \footnotesize Joint $(q_t, r_t)$ inspection for circumvention or secondary risk
+        \footnotesize Joint $(q_t, r_t)$ inspection for secondary risk or leakage
     };
     
     \node [decision, below=0.7cm of cp2] (dec2) {
         Secondary Risk?
     };
     
-    \node [refusal, right=1.2cm of dec2] (block2) {
-        \textbf{\textcolor{metricred}{Response Interception}}\\[2pt]
+    \node [refusal, right=1.8cm of dec2] (block2) {
+        \textbf{\textcolor{metricred}{\large Response Interception}}\\[2pt]
         \footnotesize Suppresses generated text and emits compliance warning
     };
     
@@ -297,13 +298,13 @@ The core methodology proposed in the FinGuard paper (arXiv:2605.29427) is a **du
     % Connections
     \draw [flowline] (input.south) -- (cp1.north);
     \draw [flowline] (cp1.south) -- (dec1.north);
-    \draw [refusalline] (dec1.east) -- node[above, font=\footnotesize\bfseries\color{metricred}] {No (Violation)} (block1.west);
-    \draw [flowline] (dec1.south) -- node[right=3pt, font=\footnotesize\bfseries\color{metricgreen!80!black}] {Yes (Safe)} (rag.north);
+    \draw [refusalline] (dec1.east) -- node[above=2pt, font=\small\bfseries\color{metricred}] {No} (block1.west);
+    \draw [flowline] (dec1.south) -- node[right=4pt, font=\small\bfseries\color{metricgreen!80!black}] {Yes} (rag.north);
     \draw [flowline] (rag.south) -- (synth.north);
     \draw [flowline] (synth.south) -- (cp2.north);
     \draw [flowline] (cp2.south) -- (dec2.north);
-    \draw [refusalline] (dec2.east) -- node[above, font=\footnotesize\bfseries\color{metricred}] {Yes (Risk)} (block2.west);
-    \draw [flowline] (dec2.south) -- node[right=3pt, font=\footnotesize\bfseries\color{metricgreen!80!black}] {No (Safe)} (output.north);
+    \draw [refusalline] (dec2.east) -- node[above=2pt, font=\small\bfseries\color{metricred}] {Yes} (block2.west);
+    \draw [flowline] (dec2.south) -- node[right=4pt, font=\small\bfseries\color{metricgreen!80!black}] {No} (output.north);
 
 \end{tikzpicture}
 \caption{Original Research Method Block Diagram: FinGuard Dual-Checkpoint Pipeline Architecture (arXiv:2605.29427).}
@@ -463,12 +464,13 @@ Figure~\ref{fig:stage2_architecture} presents the complete Stage 2 architecture,
 \begin{tikzpicture}[
     >=Latex,
     scale=0.92, every node/.style={transform shape},
+    execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000},
     procblock/.style={
         rectangle, 
         draw=headerblue, 
         fill=calloutbg, 
         line width=1.1pt, 
-        text width=7.2cm, 
+        text width=7.6cm, 
         align=center, 
         rounded corners=4pt, 
         inner sep=6pt
@@ -478,7 +480,7 @@ Figure~\ref{fig:stage2_architecture} presents the complete Stage 2 architecture,
         draw=stage2purple, 
         fill=stage2bg, 
         line width=1.2pt, 
-        text width=7.2cm, 
+        text width=7.6cm, 
         align=center, 
         rounded corners=4pt, 
         inner sep=6pt
@@ -498,7 +500,7 @@ Figure~\ref{fig:stage2_architecture} presents the complete Stage 2 architecture,
         draw=metricred, 
         fill=metricred!8, 
         line width=1.1pt, 
-        text width=4.4cm, 
+        text width=4.6cm, 
         align=center, 
         rounded corners=4pt, 
         inner sep=6pt
@@ -508,7 +510,7 @@ Figure~\ref{fig:stage2_architecture} presents the complete Stage 2 architecture,
         draw=metricgreen!85!black, 
         fill=metricgreen!12, 
         line width=1.2pt, 
-        text width=7.2cm, 
+        text width=7.6cm, 
         align=center, 
         rounded corners=4pt, 
         inner sep=6pt
@@ -531,77 +533,77 @@ Figure~\ref{fig:stage2_architecture} presents the complete Stage 2 architecture,
         \footnotesize Dialogue history $\{q_1, r_1, \dots, q_{t-1}, r_{t-1}\} \cup \{q_t\}$
     };
     
-    \node [stage2proc, below=0.55cm of input] (sessionguard) {
-        \textbf{\large\textcolor{stage2purple}{Stage 2: Cumulative Risk Meter ($R_t$)}}\\[2pt]
-        \footnotesize $R_t = \min\left(1.0, \, 0.7 R_{t-1} + r(q_t) + \Delta_{\text{escalation}}\right) \ge 0.65$?
+    \node [stage2proc, below=0.6cm of input] (sessionguard) {
+        \textbf{\large\textcolor{stage2purple}{Stage 2: Stateful Risk Meter ($R_t$)}}\\[2pt]
+        \footnotesize Cumulative Compliance Risk Tracking: $R_t \ge 0.65$?
     };
     
-    \node [refusal, right=1.2cm of sessionguard] (multirefusal) {
-        \textbf{\textcolor{metricred}{Grooming Intercept}}\\[2pt]
+    \node [refusal, right=1.8cm of sessionguard] (multirefusal) {
+        \textbf{\textcolor{metricred}{\large Grooming Intercept}}\\[2pt]
         \footnotesize Halts context-stacking session at Turn 2 or 3
     };
     
-    \node [procblock, below=0.55cm of sessionguard] (cp1) {
+    \node [procblock, below=0.6cm of sessionguard] (cp1) {
         \textbf{\large Checkpoint 1: Query Guard}\\[2pt]
-        \footnotesize SFT Intent Classifier $\bullet$ Prompt Injection Trap
+        \footnotesize Pre-Generation Intent Head $\bullet$ Injection Trap Filter
     };
     
-    \node [decision, below=0.65cm of cp1] (dec1) {
+    \node [decision, below=0.7cm of cp1] (dec1) {
         Compliant?
     };
     
-    \node [refusal, right=1.2cm of dec1] (block1) {
-        \textbf{\textcolor{metricred}{Policy Refusal}}\\[2pt]
-        \footnotesize Statutory citation for illegal inquiry
+    \node [refusal, right=1.8cm of dec1] (block1) {
+        \textbf{\textcolor{metricred}{\large Policy Refusal}}\\[2pt]
+        \footnotesize Direct statutory citation for illegal inquiry
     };
     
-    \node [stage2proc, below=0.65cm of dec1] (jurisrouter) {
+    \node [stage2proc, below=0.7cm of dec1] (jurisrouter) {
         \textbf{\large\textcolor{stage2purple}{Stage 2: Dynamic Jurisdiction Router}}\\[2pt]
-        \footnotesize Routes between US SEC/CFTC and Indian SEBI/RBI Corpus
+        \footnotesize Contextual switching between US SEC/CFTC and Indian SEBI/RBI
     };
     
-    \node [procblock, below=0.55cm of jurisrouter] (rag) {
+    \node [procblock, below=0.6cm of jurisrouter] (rag) {
         \textbf{\large Statutory RAG Engine}\\[2pt]
-        \footnotesize Retrieves exact clauses from the localized active legal corpus
+        \footnotesize Retrieves exact clauses from active localized statutory corpus
     };
     
-    \node [procblock, below=0.55cm of rag] (synth) {
+    \node [procblock, below=0.6cm of rag] (synth) {
         \textbf{\large Response Synthesis \& Grounding}\\[2pt]
         \footnotesize Constrained LLM generation anchored to retrieved statutory text
     };
     
-    \node [procblock, below=0.55cm of synth] (cp2) {
+    \node [procblock, below=0.6cm of synth] (cp2) {
         \textbf{\large Checkpoint 2: Response Guard}\\[2pt]
-        \footnotesize Joint $(q_t, r_t)$ secondary circumvention check
+        \footnotesize Joint $(q_t, r_t)$ inspection for secondary risk or leakage
     };
     
-    \node [decision, below=0.65cm of cp2] (dec2) {
+    \node [decision, below=0.7cm of cp2] (dec2) {
         Secondary Risk?
     };
     
-    \node [refusal, right=1.2cm of dec2] (block2) {
-        \textbf{\textcolor{metricred}{Response Interception}}\\[2pt]
+    \node [refusal, right=1.8cm of dec2] (block2) {
+        \textbf{\textcolor{metricred}{\large Response Interception}}\\[2pt]
         \footnotesize Suppresses output and emits regulatory alert
     };
     
-    \node [safeoutput, below=0.65cm of dec2] (output) {
+    \node [safeoutput, below=0.7cm of dec2] (output) {
         \textbf{\large\textcolor{metricgreen!70!black}{Compliant Grounded Output ($r_t$)}}\\[2pt]
         \footnotesize Legally cited, safe, and logged to session memory
     };
 
     % Connections
     \draw [flowline] (input.south) -- (sessionguard.north);
-    \draw [refusalline] (sessionguard.east) -- node[above, font=\footnotesize\bfseries\color{metricred}] {Threshold Met} (multirefusal.west);
-    \draw [flowline] (sessionguard.south) -- node[right=3pt, font=\footnotesize\bfseries\color{metricgreen!80!black}] {Safe} (cp1.north);
+    \draw [refusalline] (sessionguard.east) -- node[above=2pt, font=\small\bfseries\color{metricred}] {Breach} (multirefusal.west);
+    \draw [flowline] (sessionguard.south) -- node[right=4pt, font=\small\bfseries\color{metricgreen!80!black}] {Pass} (cp1.north);
     \draw [flowline] (cp1.south) -- (dec1.north);
-    \draw [refusalline] (dec1.east) -- node[above, font=\footnotesize\bfseries\color{metricred}] {No} (block1.west);
-    \draw [flowline] (dec1.south) -- node[right=3pt, font=\footnotesize\bfseries\color{metricgreen!80!black}] {Yes} (jurisrouter.north);
+    \draw [refusalline] (dec1.east) -- node[above=2pt, font=\small\bfseries\color{metricred}] {No} (block1.west);
+    \draw [flowline] (dec1.south) -- node[right=4pt, font=\small\bfseries\color{metricgreen!80!black}] {Yes} (jurisrouter.north);
     \draw [flowline] (jurisrouter.south) -- (rag.north);
     \draw [flowline] (rag.south) -- (synth.north);
     \draw [flowline] (synth.south) -- (cp2.north);
     \draw [flowline] (cp2.south) -- (dec2.north);
-    \draw [refusalline] (dec2.east) -- node[above, font=\footnotesize\bfseries\color{metricred}] {Yes} (block2.west);
-    \draw [flowline] (dec2.south) -- node[right=3pt, font=\footnotesize\bfseries\color{metricgreen!80!black}] {No} (output.north);
+    \draw [refusalline] (dec2.east) -- node[above=2pt, font=\small\bfseries\color{metricred}] {Yes} (block2.west);
+    \draw [flowline] (dec2.south) -- node[right=4pt, font=\small\bfseries\color{metricgreen!80!black}] {No} (output.north);
 
 \end{tikzpicture}
 \caption{Stage 2 Modified Architecture Diagram: Incorporating Multi-Turn Cumulative Risk Meter ($R_t$) and Cross-Jurisdiction Regulatory Routing (SEBI/RBI).}
