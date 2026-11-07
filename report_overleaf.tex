@@ -1,21 +1,20 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[margin=0.85in,top=1in,bottom=1in]{geometry}
-\usepackage{xcolor}
-\usepackage{colortbl}
+\usepackage[table,dvipsnames]{xcolor}
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{amsmath,amssymb}
-\usepackage{hyperref}
 \usepackage{fancyhdr}
 \usepackage[most]{tcolorbox}
 \usepackage{tikz}
-\usetikzlibrary{shapes.geometric, arrows, positioning}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning}
 \usepackage{enumitem}
 \usepackage{titlesec}
 \usepackage{microtype}
+\usepackage{hyperref}
 
-% Define color palette matching reference PDF
+% Define color palette matching professional publication standards
 \definecolor{headerblue}{HTML}{003366}
 \definecolor{accentblue}{HTML}{0055A5}
 \definecolor{tableheader}{HTML}{003366}
@@ -93,7 +92,7 @@ Base Models Evaluated & Qwen/Qwen3-0.6B, FinGuard Calibrated Guard (8.56 MB), In
 Statutory Risk Taxonomy & 11 Categories, 35 Subcategories (Table 9 in arXiv:2605.29427) \\
 Assembled SFT Training Corpus & 10,786 records (10,618 prompt-injection records + 168 canonical regulatory compliance records) \\
 Large-Scale Adversarial Suite & 5,610 evaluated samples (8 Table 7 dimensions $\times$ raw intent \& euphemism variants + perturbations) \\
-Statutory Jurisdictions & US / Global (SEC Rules 10b-5, 15c3-5, CFTC 4c, BSA) $\&$ India (SEBI PIT, PFUTP, LODR, PMLA) \\
+Statutory Jurisdictions & US / Global (SEC Rules 10b-5, 15c3-5, CFTC 4c, BSA) \& India (SEBI PIT, PFUTP, LODR, PMLA) \\
 Multi-Turn Defense Benchmark & 6 Dialogue Sessions (4 Adversarial Grooming Trajectories $\times$ 3--5 turns + 2 Benign Controls) \\
 Throughput \& Latency & 128.7 Queries/Sec (QPS) throughput; 7.76 ms mean latency under 50 concurrent threads \\
 Date \& Verification Status & November 2026 $\bullet$ All test suites verified and passing cleanly \\
@@ -172,39 +171,137 @@ When financial institutions deploy conversational LLMs, standard toxicity and ha
 % -------------------------------------------------------------
 \section{System Architecture \& Pipeline Workflow}
 
-FinGuard employs a sequential dual-firewall pipeline with statutory Retrieval-Augmented Generation (RAG).
+FinGuard employs a sequential dual-firewall pipeline interleaved with statutory Retrieval-Augmented Generation (RAG) and cumulative session tracking.
 
-\begin{figure}[h!]
+\begin{figure}[htbp]
 \centering
-\begin{tikzpicture}[node distance=1.3cm, auto,
-    block/.style={rectangle, draw=headerblue, fill=calloutbg, thick, text width=6.5cm, text centered, rounded corners, minimum height=1cm},
-    decision/.style={diamond, draw=metricamber, fill=white, thick, text width=2.5cm, text centered, inner sep=0pt},
-    line/.style={draw=headerblue, -stealth, thick},
-    refusal/.style={rectangle, draw=metricred, fill=metricred!10, thick, text width=4.5cm, text centered, rounded corners, minimum height=0.9cm},
-    success/.style={rectangle, draw=metricgreen, fill=metricgreen!10, thick, text width=6cm, text centered, rounded corners, minimum height=0.9cm}
+\begin{tikzpicture}[
+    >=Latex,
+    % Standard processing block
+    procblock/.style={
+        rectangle, 
+        draw=headerblue, 
+        fill=calloutbg, 
+        line width=1.1pt, 
+        text width=7.2cm, 
+        align=center, 
+        rounded corners=4pt, 
+        inner sep=7pt
+    },
+    % Decision diamond with wide aspect ratio so text never clips
+    decision/.style={
+        diamond, 
+        draw=metricamber!90!black, 
+        fill=metricamber!15, 
+        line width=1.1pt, 
+        aspect=2.4, 
+        inner sep=3pt, 
+        align=center, 
+        font=\bfseries\small
+    },
+    % Refusal / Interception block
+    refusal/.style={
+        rectangle, 
+        draw=metricred, 
+        fill=metricred!8, 
+        line width=1.1pt, 
+        text width=4.4cm, 
+        align=center, 
+        rounded corners=4pt, 
+        inner sep=6pt
+    },
+    % Compliant output terminal block
+    safeoutput/.style={
+        rectangle, 
+        draw=metricgreen!85!black, 
+        fill=metricgreen!12, 
+        line width=1.2pt, 
+        text width=7.2cm, 
+        align=center, 
+        rounded corners=4pt, 
+        inner sep=7pt
+    },
+    % Arrow styling
+    flowline/.style={
+        draw=headerblue, 
+        line width=1.1pt, 
+        ->
+    },
+    refusalline/.style={
+        draw=metricred, 
+        line width=1.1pt, 
+        ->
+    }
 ]
-    \node [block] (input) {\textbf{User Input Query ($q_t$)}};
-    \node [block, below of=input] (cp1) {\textbf{Checkpoint 1: Query Guard}\\\small Intent Classifier, Prompt Injection Filter \& Keyword Trap Check};
-    \node [decision, below of=cp1, node distance=2.2cm] (dec1) {\textbf{Compliant?}};
-    \node [refusal, right of=dec1, node distance=5cm] (block1) {\textbf{Policy Refusal}\\\small Specific statutory clause citation};
-    \node [block, below of=dec1, node distance=2.2cm] (rag) {\textbf{Statutory Retrieval (RAG)}\\\small TF-IDF Cosine Similarity over active legal corpus};
-    \node [block, below of=rag] (synth) {\textbf{Response Synthesis}\\\small Drafts grounded reply anchored to legal text};
-    \node [block, below of=synth] (cp2) {\textbf{Checkpoint 2: Response Guard}\\\small Inspects combined $(q_t, r_t)$ for secondary leakage};
-    \node [decision, below of=cp2, node distance=2.2cm] (dec2) {\textbf{Secondary Risk?}};
-    \node [refusal, right of=dec2, node distance=5cm] (block2) {\textbf{Response Interception}\\\small Secondary compliance risk blocked};
-    \node [success, below of=dec2, node distance=2cm] (output) {\textbf{Compliant Grounded Output}\\\small Verified safe and legally referenced};
 
-    \path [line] (input) -- (cp1);
-    \path [line] (cp1) -- (dec1);
-    \path [line] (dec1) -- node [near start] {No} (block1);
-    \path [line] (dec1) -- node [near start] {Yes} (rag);
-    \path [line] (rag) -- (synth);
-    \path [line] (synth) -- (cp2);
-    \path [line] (cp2) -- (dec2);
-    \path [line] (dec2) -- node [near start] {Yes} (block2);
-    \path [line] (dec2) -- node [near start] {No} (output);
+    % Node definitions along central vertical spine
+    \node [procblock] (input) {
+        \textbf{\large User Input Query ($q_t$)}\\[2pt]
+        \footnotesize Inbound financial user prompt or dialogue turn
+    };
+    
+    \node [procblock, below=0.6cm of input] (cp1) {
+        \textbf{\large Checkpoint 1: Query Guard}\\[3pt]
+        \footnotesize Intent Classifier $\bullet$ Prompt Injection Filter $\bullet$ Keyword Trap
+    };
+    
+    \node [decision, below=0.7cm of cp1] (dec1) {
+        Compliant?
+    };
+    
+    \node [refusal, right=1.2cm of dec1] (block1) {
+        \textbf{\textcolor{metricred}{Policy Refusal}}\\[2pt]
+        \footnotesize Immediate halt with specific statutory clause citation
+    };
+    
+    \node [procblock, below=0.7cm of dec1] (rag) {
+        \textbf{\large Statutory Retrieval (RAG)}\\[3pt]
+        \footnotesize Dual-Regime: US SEC/CFTC or Indian SEBI/RBI Corpus
+    };
+    
+    \node [procblock, below=0.6cm of rag] (synth) {
+        \textbf{\large Response Synthesis}\\[3pt]
+        \footnotesize Grounded reply generation anchored strictly in regulatory text
+    };
+    
+    \node [procblock, below=0.6cm of synth] (cp2) {
+        \textbf{\large Checkpoint 2: Response Guard}\\[3pt]
+        \footnotesize Joint $(q_t, r_t)$ inspection for circumvention or secondary risk
+    };
+    
+    \node [decision, below=0.7cm of cp2] (dec2) {
+        Secondary Risk?
+    };
+    
+    \node [refusal, right=1.2cm of dec2] (block2) {
+        \textbf{\textcolor{metricred}{Response Interception}}\\[2pt]
+        \footnotesize Suppresses generated text and emits compliance warning
+    };
+    
+    \node [safeoutput, below=0.7cm of dec2] (output) {
+        \textbf{\large\textcolor{metricgreen!70!black}{Compliant Grounded Output ($r_t$)}}\\[2pt]
+        \footnotesize Verified safe, policy-compliant, and legally referenced
+    };
+
+    % Arrow connections
+    \draw [flowline] (input.south) -- (cp1.north);
+    \draw [flowline] (cp1.south) -- (dec1.north);
+    
+    % Dec 1 branches
+    \draw [refusalline] (dec1.east) -- node[above, font=\footnotesize\bfseries\color{metricred}] {No (Violation)} (block1.west);
+    \draw [flowline] (dec1.south) -- node[right=3pt, font=\footnotesize\bfseries\color{metricgreen!80!black}] {Yes (Safe)} (rag.north);
+    
+    \draw [flowline] (rag.south) -- (synth.north);
+    \draw [flowline] (synth.south) -- (cp2.north);
+    \draw [flowline] (cp2.south) -- (dec2.north);
+    
+    % Dec 2 branches
+    \draw [refusalline] (dec2.east) -- node[above, font=\footnotesize\bfseries\color{metricred}] {Yes (Risk)} (block2.west);
+    \draw [flowline] (dec2.south) -- node[right=3pt, font=\footnotesize\bfseries\color{metricgreen!80!black}] {No (Safe)} (output.north);
+
 \end{tikzpicture}
-\caption{End-to-end FinGuard Dual-Checkpoint Compliance Pipeline.}
+\caption{End-to-End FinGuard Dual-Checkpoint Compliance Pipeline Architecture.}
+\label{fig:pipeline_architecture}
 \end{figure}
 
 \subsection{Checkpoint 1: Query Guard}
@@ -301,7 +398,7 @@ In Section 5.3 (\textit{``Adaptation to Out-of-Domain Regulations''}), the paper
 \textbf{Insider Trading} & SEC Rule 10b-5 \& Sec 10(b) Exchange Act 1934 & SEBI (PIT) Regulations 2015, Regulation 3(1) \& 4(1) \\
 \textbf{Market Manipulation} & CFTC Rule 4c \& Sec 9(a)(2) Exchange Act 1934 & SEBI (PFUTP) Regulations 2003, Regulation 4(2) \\
 \textbf{Algorithmic Controls} & SEC Rule 15c3-5 (Market Access Rule) & SEBI Master Circular on Algo Trading Controls Clause 1.2 \\
-\textbf{AML \& Structuring} & Bank Secrecy Act 31 CFR \S 1020 \& FinCEN Rule & Prevention of Money Laundering Act (PMLA) 2002 \\
+\textbf{AML \& Structuring} & Bank Secrecy Act 31 CFR \S~1020 \& FinCEN Rule & Prevention of Money Laundering Act (PMLA) 2002 \\
 \textbf{Unlicensed Advisory} & Investment Advisers Act of 1940 Section 203 & SEBI (Investment Advisers) Regulations 2013, Reg 3(1) \\
 \bottomrule
 \end{tabularx}
