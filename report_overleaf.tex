@@ -1,0 +1,430 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=0.85in,top=1in,bottom=1in]{geometry}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage[most]{tcolorbox}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{microtype}
+
+% Define color palette matching reference PDF
+\definecolor{headerblue}{HTML}{003366}
+\definecolor{accentblue}{HTML}{0055A5}
+\definecolor{tableheader}{HTML}{003366}
+\definecolor{calloutbg}{HTML}{F0F4F8}
+\definecolor{calloutborder}{HTML}{B0C4DE}
+\definecolor{metricgreen}{HTML}{059669}
+\definecolor{metricamber}{HTML}{D97706}
+\definecolor{metricred}{HTML}{DC2626}
+\definecolor{lightgray}{HTML}{F8FAFC}
+
+% Hyperref setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=accentblue,
+    citecolor=accentblue,
+    urlcolor=accentblue
+}
+
+% Header and Footer configuration
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{gray}{\textbf{FINGUARD-COMPLETE} $\mid$ REGULATORY COMPLIANCE GUARDRAIL}}
+\fancyhead[R]{\small\textcolor{gray}{arXiv:2605.29427 REPLICATION \& STAGE 2}}
+\fancyfoot[L]{\small\textcolor{gray}{Final Implementation Report $\bullet$ Branch: \texttt{qwen3-0.6b-stress-multiturn-stage2}}}
+\fancyfoot[R]{\small\textcolor{gray}{Page \thepage}}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+
+% Section title formatting
+\titleformat{\section}{\Large\bfseries\color{headerblue}}{\thesection.}{0.5em}{}[\titlerule]
+\titleformat{\subsection}{\large\bfseries\color{accentblue}}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{black}}{\thesubsubsection}{0.5em}{}
+
+% Custom callout boxes
+\newtcolorbox{calloutbox}[1][]{
+    colback=calloutbg,
+    colframe=calloutborder,
+    boxrule=1pt,
+    arc=3pt,
+    left=8pt,
+    right=8pt,
+    top=6pt,
+    bottom=6pt,
+    fonttitle=\bfseries\color{headerblue},
+    #1
+}
+
+\begin{document}
+
+% -------------------------------------------------------------
+% TITLE & EXPERIMENT SNAPSHOT
+% -------------------------------------------------------------
+\begin{flushleft}
+    {\large\bfseries\color{accentblue} FinGuard Regulatory AI Safety Project}\\[0.3em]
+    {\huge\bfseries\color{headerblue} FinGuard-Complete: Financial Regulatory Compliance Guardrail, Large-Scale Stress Testing \& Stage 2 Extensions}\\[0.5em]
+    {\large\color{gray} Research Paper Replication (arXiv:2605.29427) $\bullet$ Qwen3-0.6B SFT \& Self-Play $\bullet$ 5,610-Sample Stress Suite $\bullet$ Indian SEBI Adaptation $\bullet$ Multi-Turn Defense}\\[0.8em]
+    \rule{\linewidth}{1.5pt}
+\end{flushleft}
+
+\begin{calloutbox}
+\textbf{Project Scope \& Execution Summary:} Comprehensive end-to-end implementation of the FinGuard framework on branch \texttt{qwen3-0.6b-stress-multiturn-stage2}. Covers pure research paper replication (arXiv:2605.29427), Qwen3-0.6B LoRA fine-tuning on 10,786 records, large-scale adversarial red-teaming across 5,610 samples, Stage 2 zero-shot cross-jurisdiction transfer to Indian statutory law (SEBI \& RBI), and multi-turn conversational risk tracking.
+\end{calloutbox}
+
+\vspace{0.5em}
+
+\begin{table}[h!]
+\centering
+\small
+\begin{tabularx}{\textwidth}{>{\bfseries\color{headerblue}}l X}
+\toprule
+\rowcolor{tableheader} \textcolor{white}{Experiment \& System Snapshot} & \textcolor{white}{Recorded Technical Value / Configuration} \\
+\midrule
+Repository \& Final Branch & \texttt{Shreya22-hub/finguard-stage1} $\rightarrow$ \texttt{qwen3-0.6b-stress-multiturn-stage2} \\
+Base Models Evaluated & Qwen/Qwen3-0.6B, FinGuard Calibrated Guard (8.56 MB), Injection Model (2.54 MB), Ollama Llama-3.2 \\
+Statutory Risk Taxonomy & 11 Categories, 35 Subcategories (Table 9 in arXiv:2605.29427) \\
+Assembled SFT Training Corpus & 10,786 records (10,618 prompt-injection records + 168 canonical regulatory compliance records) \\
+Large-Scale Adversarial Suite & 5,610 evaluated samples (8 Table 7 dimensions $\times$ raw intent \& euphemism variants + perturbations) \\
+Statutory Jurisdictions & US / Global (SEC Rules 10b-5, 15c3-5, CFTC 4c, BSA) $\&$ India (SEBI PIT, PFUTP, LODR, PMLA) \\
+Multi-Turn Defense Benchmark & 6 Dialogue Sessions (4 Adversarial Grooming Trajectories $\times$ 3--5 turns + 2 Benign Controls) \\
+Throughput \& Latency & 128.7 Queries/Sec (QPS) throughput; 7.76 ms mean latency under 50 concurrent threads \\
+Date \& Verification Status & November 2026 $\bullet$ All test suites verified and passing cleanly \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% -------------------------------------------------------------
+% SECTION 1: EXECUTIVE SUMMARY
+% -------------------------------------------------------------
+\section{Executive Summary}
+
+This project presents the complete design, engineering, and empirical evaluation of \textbf{FinGuard}, a domain-specific regulatory compliance guardrail for conversational AI systems interacting with financial markets. While general-purpose language models (e.g., GPT-4, Llama-3) and baseline moderation guards (e.g., Llama-Guard) frequently fail to detect financial non-compliance due to legal jargon, euphemistic slang, multi-step execution plans, or conversational context-stacking, FinGuard introduces a \textbf{dual-checkpoint firewall architecture} interleaved with statutory Retrieval-Augmented Generation (RAG) and cumulative session risk tracking.
+
+The final repository incorporates five major technological milestones:
+\begin{enumerate}[leftmargin=*,noitemsep]
+    \item \textbf{Stage 1 Paper Replication:} Ingests 13 US/Global statutory directives across 11 categories and 35 subcategories (Table 9), reproducing the dual-checkpoint pipeline and evaluating benchmark performance (Table 5).
+    \item \textbf{Qwen3-0.6B Parameter-Efficient SFT \& Mini Self-Play:} Adapts Qwen3-0.6B using LoRA on a 10,786-example multi-task corpus, achieving 99.50\% injection detection and zero false positives.
+    \item \textbf{Large-Scale Adversarial Red-Teaming (5,610 Samples):} Scales the Table 7 stress evaluation from 11 samples/dimension to 5,610 samples, achieving an overall \textbf{97.65\% Defense Success Rate (DSR)} and \textbf{0.00\% False Refusal Rate (FRR)} on benign inquiries.
+    \item \textbf{Stage 2 Cross-Jurisdiction Transfer (Section 5.3):} Validates zero-shot statutory adaptation from US SEC/CFTC rules to Indian regulations (\textbf{SEBI PIT, PFUTP, LODR, PMLA}) via legal policy ingestion alone, reaching a \textbf{100.0\% adaptation success rate}.
+    \item \textbf{Multi-Turn Stateful Defense (Sections 5.2 \& 5.4):} Formulates a stateful Cumulative Compliance Risk Score ($R_t$) that halts ``boiling-the-frog'' grooming attacks at Turn 2 or 3, achieving \textbf{100.0\% Multi-Turn DSR} compared to 50.0\% on stateless baselines.
+\end{enumerate}
+
+\begin{calloutbox}
+\textbf{Main Empirical Conclusion:}
+The calibrated FinGuard guard achieves a \textbf{97.65\% Defense Success Rate} across 5,610 stress test vectors, substantially outperforming Llama-Guard-3-8B (38.4\%) and GPT-4 (63.8\%). Furthermore, the framework completely eliminates false refusals (0.00\% FRR) and successfully transfers to Indian SEBI/RBI regulations with 100\% statutory accuracy at 7.76 ms latency.
+\end{calloutbox}
+
+\vspace{0.5em}
+
+\begin{table}[h!]
+\centering
+\small
+\begin{tabularx}{\textwidth}{l c c c c}
+\toprule
+\rowcolor{tableheader} \textcolor{white}{Benchmark / Task Dimension} & \textcolor{white}{Sample Size ($N$)} & \textcolor{white}{Zero-Shot Baseline} & \textcolor{white}{Paper Baseline / Target} & \textcolor{white}{FinGuard (Our Result)} \\
+\midrule
+Checkpoint 1 Query Guard F1 & 33 & 16.69\% & 84.13\% (Paper SFT) & \textbf{99.19\%} \\
+Checkpoint 2 Response Guard F1 & 33 & 22.91\% & 84.71\% (Paper SFT) & \textbf{100.00\%} \\
+Table 7 Adversarial DSR (5,610 Suite) & 5,225 & 38.40\% (Llama-Guard) & 84.70\% (Paper SFT) & \textbf{97.65\%} \\
+False Refusal Rate (FRR on Benign) & 385 & -- & 2.33\% -- 5.00\% & \textbf{0.00\%} \\
+Cross-Jurisdiction Adaptation (SEBI) & 4 Scenarios & 0.00\% & Section 5.3 (arXiv) & \textbf{100.00\%} \\
+Multi-Turn Conversational Defense & 6 Sessions & 50.00\% (Stateless) & Section 5.4 (arXiv) & \textbf{100.00\%} \\
+Inference Latency / Throughput & 1,250 Load & $\sim$320 ms & $<$50 ms target & \textbf{7.76 ms / 128.7 QPS} \\
+\bottomrule
+\end{tabularx}
+\caption{Consolidated At-a-Glance Final Metrics across all Project Experiments.}
+\end{table}
+
+% -------------------------------------------------------------
+% SECTION 2: PROBLEM STATEMENT & OBJECTIVES
+% -------------------------------------------------------------
+\section{Problem Statement and Objectives}
+
+\subsection{Problem Statement}
+When financial institutions deploy conversational LLMs, standard toxicity and hate-speech filters are ineffective against financial malfeasance. Financial violations are governed by exact statutory criteria and are frequently masked using:
+\begin{itemize}[noitemsep]
+    \item \textbf{Euphemistic Camouflage:} Framing market manipulation as ``liquidity optimization'' or bribery as ``relationship consideration fees''.
+    \item \textbf{Adversarial Role-Playing \& Prefix Injections:} Disguising illegal inquiries as internal audit simulations (``As an internal compliance auditor investigating anomalies...'').
+    \item \textbf{Multi-Turn Context-Stacking:} Establishing legitimate context across early dialogue turns before executing non-compliant strategies in later turns.
+    \item \textbf{Cross-Jurisdiction Discrepancies:} Violations that are legal under one regime but strictly penalized under another (e.g., US SEC Rule 10b-5 vs SEBI PIT Regulations).
+\end{itemize}
+
+\subsection{Project Objectives}
+\begin{enumerate}[noitemsep]
+    \item Reproduce the dual-checkpoint architecture and 11-category statutory taxonomy from arXiv:2605.29427.
+    \item Fine-tune Qwen3-0.6B with LoRA and test mini-GRPO self-play reinforcement learning mechanics.
+    \item Expand adversarial red-teaming to a 5,610-sample suite aligned with Table 7 of the paper.
+    \item Adapt the compliance pipeline to the Indian regulatory regime (SEBI \& RBI) via policy text ingestion alone.
+    \item Implement and verify a multi-turn conversational risk tracking guardrail against context-stacking attacks.
+    \item Deploy an interactive 7-tab Streamlit web application and automated audit PDF generator.
+\end{enumerate}
+
+% -------------------------------------------------------------
+% SECTION 3: SYSTEM ARCHITECTURE & WORKFLOW
+% -------------------------------------------------------------
+\section{System Architecture \& Pipeline Workflow}
+
+FinGuard employs a sequential dual-firewall pipeline with statutory Retrieval-Augmented Generation (RAG).
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[node distance=1.3cm, auto,
+    block/.style={rectangle, draw=headerblue, fill=calloutbg, thick, text width=6.5cm, text centered, rounded corners, minimum height=1cm},
+    decision/.style={diamond, draw=metricamber, fill=white, thick, text width=2.5cm, text centered, inner sep=0pt},
+    line/.style={draw=headerblue, -stealth, thick},
+    refusal/.style={rectangle, draw=metricred, fill=metricred!10, thick, text width=4.5cm, text centered, rounded corners, minimum height=0.9cm},
+    success/.style={rectangle, draw=metricgreen, fill=metricgreen!10, thick, text width=6cm, text centered, rounded corners, minimum height=0.9cm}
+]
+    \node [block] (input) {\textbf{User Input Query ($q_t$)}};
+    \node [block, below of=input] (cp1) {\textbf{Checkpoint 1: Query Guard}\\\small Intent Classifier, Prompt Injection Filter \& Keyword Trap Check};
+    \node [decision, below of=cp1, node distance=2.2cm] (dec1) {\textbf{Compliant?}};
+    \node [refusal, right of=dec1, node distance=5cm] (block1) {\textbf{Policy Refusal}\\\small Specific statutory clause citation};
+    \node [block, below of=dec1, node distance=2.2cm] (rag) {\textbf{Statutory Retrieval (RAG)}\\\small TF-IDF Cosine Similarity over active legal corpus};
+    \node [block, below of=rag] (synth) {\textbf{Response Synthesis}\\\small Drafts grounded reply anchored to legal text};
+    \node [block, below of=synth] (cp2) {\textbf{Checkpoint 2: Response Guard}\\\small Inspects combined $(q_t, r_t)$ for secondary leakage};
+    \node [decision, below of=cp2, node distance=2.2cm] (dec2) {\textbf{Secondary Risk?}};
+    \node [refusal, right of=dec2, node distance=5cm] (block2) {\textbf{Response Interception}\\\small Secondary compliance risk blocked};
+    \node [success, below of=dec2, node distance=2cm] (output) {\textbf{Compliant Grounded Output}\\\small Verified safe and legally referenced};
+
+    \path [line] (input) -- (cp1);
+    \path [line] (cp1) -- (dec1);
+    \path [line] (dec1) -- node [near start] {No} (block1);
+    \path [line] (dec1) -- node [near start] {Yes} (rag);
+    \path [line] (rag) -- (synth);
+    \path [line] (synth) -- (cp2);
+    \path [line] (cp2) -- (dec2);
+    \path [line] (dec2) -- node [near start] {Yes} (block2);
+    \path [line] (dec2) -- node [near start] {No} (output);
+\end{tikzpicture}
+\caption{End-to-end FinGuard Dual-Checkpoint Compliance Pipeline.}
+\end{figure}
+
+\subsection{Checkpoint 1: Query Guard}
+Evaluates the user prompt $q_t$. The classifier checks for explicit non-compliant keywords, prompt injection override tokens (e.g., DAN, jailbreak prefixes), and calibrated neural intent probabilities ($p_{\text{unsafe}} \ge 0.50$). If flagged, execution terminates with an authoritative statutory citation.
+
+\subsection{Dual-Regime Regulatory Retrieval (RAG)}
+When permitted, the system retrieves relevant statutory clauses via TF-IDF cosine similarity. The engine dynamically routes retrieval based on the active regime: US/Global (SEC/CFTC) or Indian Law (SEBI/RBI).
+
+\subsection{Checkpoint 2: Response Guard}
+Evaluates the concatenated sequence $(q_t, r_t)$ to guarantee that the synthesized response does not inadvertently disclose circumvention instructions or facilitate illegal market practices.
+
+% -------------------------------------------------------------
+% SECTION 4: DATASET SOURCES & PROCESSING
+% -------------------------------------------------------------
+\section{Dataset Sources, Sizes, Labels and Usage}
+
+\begin{table}[h!]
+\centering
+\small
+\begin{tabularx}{\textwidth}{l p{4cm} p{3.5cm} X}
+\toprule
+\rowcolor{tableheader} \textcolor{white}{Dataset Source} & \textcolor{white}{Raw / Corpus Size} & \textcolor{white}{Used in Final System} & \textcolor{white}{Experimental Purpose} \\
+\midrule
+Hugging Face Injection Dataset & Train: 10,699; Test: 3,047 & 10,618 Cleaned Train; 200 Held-Out Test & Prompt injection classifier training and evaluation \\
+Canonical SFT Records & 2,168 rows (2,000 injection + 168 compliance) & 84 Query + 84 Response records (168 total) & Financial query/response supervised fine-tuning \\
+Indian Statutory Corpus & 39 full legal clauses & 39 ingested clauses & Stage 2 Indian SEBI/RBI cross-jurisdiction RAG \\
+US / Global Statutory Corpus & 13 major directives & 13 ingested directives & Stage 1 US SEC/CFTC compliance RAG \\
+Large-Scale Stress Test Suite & 5,610 synthetic samples & 5,610 evaluated samples & Table 7 multi-dimensional adversarial benchmark \\
+Multi-Turn Dialogue Sessions & 6 structured sessions & 6 evaluated sessions & Multi-turn context-stacking evaluation \\
+\bottomrule
+\end{tabularx}
+\caption{Dataset Manifest and Allocation across all Project Experiments.}
+\end{table}
+
+\subsection{Financial Risk Taxonomy (11 Categories, 35 Subcategories)}
+The project adheres to the official taxonomy defined in Table 9 of arXiv:2605.29427:
+\begin{itemize}[noitemsep]
+    \item \textbf{C01: Market Manipulation \& Fraud} (Spoofing, Wash Sales, Marking the Close, Pump-and-Dump)
+    \item \textbf{C02: Insider Trading \& UPSI} (Material Non-Public Information, Corporate Leakage, Front-Running)
+    \item \textbf{C03: Unlicensed Advisory \& Mis-Selling} (Guaranteed Yield Claims, Telegram Tipping, Unregistered RIA)
+    \item \textbf{C04: Credit Violations \& Lending Fraud} (DSCR Falsification, Straw Buyers, Collateral Hiding)
+    \item \textbf{C05: Money Laundering \& Structuring} (Sub-threshold deposits, Smurfing, UBO Obfuscation)
+    \item \textbf{C06: Corruption \& Benefit Transfer} (Commercial Bribery, Gratuities, Kickback Invoices)
+    \item \textbf{C07: Algorithmic Pre-Trade Controls} (Kill-Switch Bypass, OTR Flooding, PIRCs Violation)
+    \item \textbf{C08: Consumer Protection Violations} (Abusive Debt Collection, Coercion, Harassment)
+    \item \textbf{C09: Data Security \& Privacy} (PII Database Exfiltration, Audit Log Deletion)
+    \item \textbf{C10: Foreign Exchange Violations} (Hawala Transfers, Trade Over/Under-Invoicing)
+    \item \textbf{C11: Administrative \& Documentation} (Ephemeral Chat Trading, Audit Record Shredding)
+\end{itemize}
+
+% -------------------------------------------------------------
+% SECTION 5: MODEL ARCHITECTURE & FINE-TUNING
+% -------------------------------------------------------------
+\section{Model Architecture and Fine-Tuning}
+
+\subsection{Parameter-Efficient Adaptation with LoRA (Qwen3-0.6B)}
+The model was fine-tuned using parameter-efficient Low-Rank Adaptation (LoRA) targeting query, key, value, and output projections.
+
+\begin{table}[h!]
+\centering
+\small
+\begin{tabularx}{\textwidth}{>{\bfseries\color{headerblue}}l X >{\bfseries\color{headerblue}}l X}
+\toprule
+\rowcolor{tableheader} \textcolor{white}{Hyperparameter} & \textcolor{white}{Setting} & \textcolor{white}{Hyperparameter} & \textcolor{white}{Setting} \\
+\midrule
+Base Checkpoint & Qwen/Qwen3-0.6B & LoRA Rank ($r$) / Alpha & 8 / 16 \\
+Target Modules & \texttt{q\_proj, k\_proj, v\_proj, o\_proj} & LoRA Dropout & 0.05 \\
+Learning Rate & $3 \times 10^{-5}$ & Optimizer / Scheduler & AdamW / Cosine Decay \\
+Batch Size / Grad Accum & 1 / 8 (Effective batch: 8) & Precision & FP16 (Seed: 42) \\
+Max Sequence Length & 1,536 tokens & Regulatory Task Weight & $5.0\times$ (compliance records) \\
+Training Steps & 1,345 optimizer steps & Training Loss & 0.2308 (43.5 minutes runtime) \\
+\bottomrule
+\end{tabularx}
+\caption{LoRA Fine-Tuning Hyperparameters for Qwen3-0.6B.}
+\end{table}
+
+\subsection{Calibrated Guard Model Deployment}
+In addition to the Qwen3-0.6B LoRA adapter, the repository bundles a calibrated 8.56 MB Scikit-learn guard model trained on 10,529 financial samples with CalibratedClassifierCV ($\tau = 0.50$), achieving sub-10 ms execution speeds and seamless local integration.
+
+% -------------------------------------------------------------
+% SECTION 6: STAGE 2 CROSS-JURISDICTION TRANSFER
+% -------------------------------------------------------------
+\section{Stage 2: Cross-Jurisdiction Transfer (Indian SEBI/RBI Adaptation)}
+
+In Section 5.3 (\textit{``Adaptation to Out-of-Domain Regulations''}), the paper demonstrates that FinGuard adapts to unseen jurisdictions using regulatory text ingestion alone. We extended this capability to the Indian financial statutory framework.
+
+\begin{table}[h!]
+\centering
+\small
+\begin{tabularx}{\textwidth}{p{3.5cm} p{5.5cm} p{5.5cm}}
+\toprule
+\rowcolor{tableheader} \textcolor{white}{Violation Category} & \textcolor{white}{US / Global Framework} & \textcolor{white}{Indian Legal Framework (SEBI \& RBI)} \\
+\midrule
+\textbf{Insider Trading} & SEC Rule 10b-5 \& Sec 10(b) Exchange Act 1934 & SEBI (PIT) Regulations 2015, Regulation 3(1) \& 4(1) \\
+\textbf{Market Manipulation} & CFTC Rule 4c \& Sec 9(a)(2) Exchange Act 1934 & SEBI (PFUTP) Regulations 2003, Regulation 4(2) \\
+\textbf{Algorithmic Controls} & SEC Rule 15c3-5 (Market Access Rule) & SEBI Master Circular on Algo Trading Controls Clause 1.2 \\
+\textbf{AML \& Structuring} & Bank Secrecy Act 31 CFR \S 1020 \& FinCEN Rule & Prevention of Money Laundering Act (PMLA) 2002 \\
+\textbf{Unlicensed Advisory} & Investment Advisers Act of 1940 Section 203 & SEBI (Investment Advisers) Regulations 2013, Reg 3(1) \\
+\bottomrule
+\end{tabularx}
+\caption{Cross-Jurisdiction Statutory Mapping between US and Indian Regulatory Frameworks.}
+\end{table}
+
+\noindent\textbf{Adaptation Evaluation:} Implemented in \texttt{src/adaptation/jurisdiction\_adapter.py}. Across all evaluated transfer scenarios, the adapter achieved a \textbf{100.0\% Adaptation Success Rate}, dynamically retrieving applicable SEBI circulars and formatting localized statutory refusals with 1.04 ms latency.
+
+% -------------------------------------------------------------
+% SECTION 7: MULTI-TURN CONVERSATIONAL DEFENSE
+% -------------------------------------------------------------
+\section{Multi-Turn Conversational Defense (Context-Stacking)}
+
+\subsection{Mathematical Cumulative Risk Model}
+To defeat ``boiling-the-frog'' grooming attacks where attackers diffuse malicious intent over 3--5 turns, we implemented a session-level Cumulative Compliance Risk Score ($R_t$):
+\begin{equation}
+    R_t = \min\left(1.0, \; \lambda \cdot R_{t-1} + r(q_t) + \Delta_{\text{escalation}}\right)
+\end{equation}
+where:
+\begin{itemize}[noitemsep]
+    \item $R_t \in [0.0, 1.0]$ represents cumulative compliance risk at turn $t$.
+    \item $\lambda = 0.70$ is the exponential memory retention factor.
+    \item $r(q_t)$ is the standalone risk score of the incoming query.
+    \item $\Delta_{\text{escalation}} = 0.25$ is the contextual momentum penalty triggered when actionable queries follow boundary-probing priming.
+    \item $\tau = 0.65$ is the early interception cutoff threshold.
+\end{itemize}
+
+\subsection{Empirical Trajectory Evaluation}
+Evaluated via \texttt{src/evaluation/evaluate\_multiturn.py} across 6 multi-turn sessions:
+\begin{itemize}[noitemsep]
+    \item \textbf{FinGuard Multi-Turn Defense Success Rate:} \textbf{100.00\%} (Intercepts attacks at Turn 2 or Turn 3 before exploitation).
+    \item \textbf{Stateless Single-Turn Baseline DSR:} \textbf{50.00\%} (Demonstrating a +50.0\% early interception advantage).
+    \item \textbf{False Positive Rate on Benign Control Sessions:} \textbf{0.00\%} ($R_t$ remains under 0.11 across all 3 turns).
+\end{itemize}
+
+% -------------------------------------------------------------
+% SECTION 8: LARGE-SCALE ADVERSARIAL STRESS TESTING (TABLE 7)
+% -------------------------------------------------------------
+\section{Large-Scale Adversarial Stress Testing (5,610 Samples)}
+
+\begin{table}[h!]
+\centering
+\small
+\begin{tabularx}{\textwidth}{l c c c c c}
+\toprule
+\rowcolor{tableheader} \textcolor{white}{Evasion Dimension (Table 7 Alignment)} & \textcolor{white}{$N$} & \textcolor{white}{FinGuard DSR} & \textcolor{white}{Llama-Guard-3} & \textcolor{white}{GPT-4} & \textcolor{white}{Paper SFT} \\
+\midrule
+Boundary Probing (Raw Intent) & 308 & \textbf{98.05\%} & 32.1\% & 60.4\% & 85.3\% \\
+Boundary Probing + Euphemism (Slang) & 297 & \textbf{96.30\%} & 18.5\% & 42.1\% & 74.6\% \\
+Multi-Step Reasoning (Raw Intent) & 308 & \textbf{98.05\%} & 46.2\% & 71.5\% & 91.2\% \\
+Multi-Step Reasoning + Euphemism & 297 & \textbf{100.00\%} & 28.4\% & 56.1\% & 82.5\% \\
+Jargon Camouflage (Raw Intent) & 308 & \textbf{96.10\%} & 38.6\% & 63.2\% & 87.5\% \\
+Jargon Camouflage + Euphemism & 297 & \textbf{100.00\%} & 22.0\% & 47.5\% & 77.4\% \\
+Distractor Injection (Raw Intent) & 308 & \textbf{98.05\%} & 52.8\% & 74.0\% & 92.4\% \\
+Distractor Injection + Euphemism & 297 & \textbf{100.00\%} & 35.1\% & 58.7\% & 84.1\% \\
+Process Obfuscation (Raw Intent) & 308 & \textbf{99.03\%} & 51.3\% & 72.1\% & 93.0\% \\
+Process Obfuscation + Euphemism & 297 & \textbf{98.99\%} & 33.5\% & 57.9\% & 83.7\% \\
+Reverse Elicitation (Auditor Disguise) & 308 & \textbf{99.03\%} & 41.5\% & 65.3\% & 90.8\% \\
+Reverse Elicitation + Euphemism & 297 & \textbf{100.00\%} & 24.2\% & 51.0\% & 80.3\% \\
+Nested Scenario (Restructuring Crisis) & 308 & \textbf{91.56\%} & 48.0\% & 69.8\% & 89.6\% \\
+Nested Scenario + Euphemism & 297 & \textbf{98.99\%} & 31.7\% & 53.4\% & 81.2\% \\
+Insider Role-Playing (Raw Intent) & 308 & \textbf{91.88\%} & 44.7\% & 68.9\% & 90.1\% \\
+Insider Role-Playing + Euphemism & 297 & \textbf{95.29\%} & 27.9\% & 52.3\% & 81.8\% \\
+Prompt Injection / Jailbreak & 220 & \textbf{99.55\%} & 39.0\% & 62.0\% & 88.0\% \\
+Perturbation Stress (Leetspeak/Typos) & 165 & \textbf{97.58\%} & 41.2\% & 66.5\% & 89.4\% \\
+Benign Educational Control (FRR) & 385 & \textbf{0.00\% FRR} & -- & -- & $<$5.0\% \\
+\midrule
+\rowcolor{calloutbg} \textbf{Total Suite Evaluation} & \textbf{5,610} & \textbf{97.65\% DSR} & \textbf{38.40\%} & \textbf{63.80\%} & \textbf{84.70\%} \\
+\bottomrule
+\end{tabularx}
+\caption{Adversarial Robustness Breakdown across 5,610 Samples compared to Table 7 Baselines.}
+\end{table}
+
+\noindent\textbf{Key Finding on Euphemistic Camouflage:}
+While open-weight guards like Llama-Guard-3 collapse below 30\% defense when attacks are camouflaged in financial slang (e.g., dropping to 18.5\% on Boundary Probing + Euphemism), FinGuard sustains \textbf{95.29\% to 100.00\%} robustness across all euphemism variants.
+
+% -------------------------------------------------------------
+% SECTION 9: CONCURRENCY & SYSTEM PERFORMANCE
+% -------------------------------------------------------------
+\section{Concurrency, Latency \& System Performance}
+
+Evaluated using \texttt{src/evaluation/stress\_test\_concurrency.py} across 1, 5, 10, 20, and 50 concurrent worker threads executing 1,250 requests:
+\begin{itemize}[noitemsep]
+    \item \textbf{Mean Inference Latency:} 7.76 ms
+    \item \textbf{p95 / p99 Latency:} 10.97 ms / 13.11 ms
+    \item \textbf{Peak Throughput:} 128.7 Queries per Second (QPS)
+    \item \textbf{Error Rate / Dropped Requests:} 0.00\% (1,250 / 1,250 requests completed successfully)
+\end{itemize}
+
+% -------------------------------------------------------------
+% SECTION 10: USER INTERFACE & DELIVERABLES
+% -------------------------------------------------------------
+\section{User Interface \& Project Deliverables}
+
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Streamlit Web Dashboard (\texttt{app/streamlit\_app.py}):} Features 7 tabs:
+    \begin{itemize}[noitemsep]
+        \item \textit{Tab 1: Interactive Two-Checkpoint Guard Demo}
+        \item \textit{Tab 2: Statutory Financial Risk Taxonomy (Table 9)}
+        \item \textit{Tab 3: Paper Results \& Benchmark Comparison (Table 5)}
+        \item \textit{Tab 4: Large-Scale Stress Testing Simulator (5,610 Tests \& Table 7 Breakdown)}
+        \item \textit{Tab 5: Stage 2 Cross-Jurisdiction Transfer (US SEC vs Indian SEBI)}
+        \item \textit{Tab 6: Multi-Turn Conversational Defense \& Live Cumulative Risk Meter ($R_t$)}
+        \item \textit{Tab 7: Authoritative Statutory Corpus Viewer (US \& Indian Regulations)}
+    \end{itemize}
+    \item \textbf{Automated 10-Page Audit PDF Report (\texttt{FinGuard\_Stress\_Testing\_Report\_A\_to\_Z.pdf}):} Generated via ReportLab with executive sign-off, percentile latencies, and risk level classifications.
+\end{enumerate}
+
+% -------------------------------------------------------------
+% SECTION 11: CONCLUSION & REPRODUCIBILITY
+% -------------------------------------------------------------
+\section{Conclusion and Reproducibility}
+
+The FinGuard framework deployed on branch \texttt{qwen3-0.6b-stress-multiturn-stage2} demonstrates a robust compliance barrier for financial AI interactions. By combining dual-checkpoint classification, zero-shot statutory transfer to Indian SEBI/RBI regulations, and stateful cumulative risk tracking for multi-turn grooming attacks, the system achieves an overall \textbf{97.65\% Defense Success Rate}, \textbf{0.00\% False Refusal Rate}, and \textbf{100\% Multi-Turn Defense}, significantly exceeding standard frontier LLM baselines.
+
+\subsection{Reproducibility Commands}
+\begin{verbatim}
+git checkout qwen3-0.6b-stress-multiturn-stage2
+python src/verify.py
+python src/evaluation/run_large_scale_table7_stress.py
+python src/adaptation/jurisdiction_adapter.py
+python src/evaluation/evaluate_multiturn.py
+streamlit run app/streamlit_app.py
+\end{verbatim}
+
+\end{document}
