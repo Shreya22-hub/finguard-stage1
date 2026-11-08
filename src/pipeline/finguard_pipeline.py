@@ -13,8 +13,13 @@ except ModuleNotFoundError:
     from retrieval.retriever import RegulatoryRetriever
 
 class FinGuardPipeline:
-    def __init__(self, use_ollama=False, ollama_model="llama3.2"):
-        self.guard = FinGuardClassifier(use_ollama=use_ollama, ollama_model=ollama_model)
+    def __init__(self, use_ollama=False, ollama_model="llama3.2", use_qwen=True, qwen_adapter_path=None):
+        self.guard = FinGuardClassifier(
+            use_ollama=use_ollama,
+            ollama_model=ollama_model,
+            use_qwen=use_qwen,
+            qwen_adapter_path=qwen_adapter_path
+        )
         self.retriever = RegulatoryRetriever()
 
     def process_query(self, user_query):

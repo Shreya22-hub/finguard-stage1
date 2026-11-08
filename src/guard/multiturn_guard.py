@@ -18,10 +18,18 @@ class MultiTurnSessionGuard:
     context-stacking and progressive escalation evasion.
     """
 
-    def __init__(self, jurisdiction="US_GLOBAL", decay_factor=0.70, risk_threshold=0.65):
+    def __init__(self, jurisdiction="US_GLOBAL", decay_factor=0.70, risk_threshold=0.65, use_qwen=True):
         self.jurisdiction_adapter = JurisdictionAdapter(default_jurisdiction=jurisdiction)
         self.decay_factor = decay_factor
         self.risk_threshold = risk_threshold
+        self.use_qwen = use_qwen
+        self.neural_guard = None
+        if self.use_qwen:
+            try:
+                from src.guard.compliance_guard import FinGuardClassifier
+                self.neural_guard = FinGuardClassifier(use_qwen=True)
+            except Exception:
+                self.neural_guard = None
         self.reset_session()
 
         # Sensitive compliance patterns and boundary indicators
@@ -66,6 +74,16 @@ class MultiTurnSessionGuard:
         for p in self.priming_patterns:
             if re.search(p, text):
                 max_turn_risk = max(max_turn_risk, 0.35)
+
+        # Incorporate Qwen3-0.6B neural verification if enabled
+        if self.use_qwen and self.neural_guard:
+            try:
+                res = self.neural_guard.predict(text)
+                if not res.get("is_safe", True):
+                    max_turn_risk = max(max_turn_risk, 0.85)
+                    matched_category = matched_category or res.get("category")
+            except Exception:
+                pass
 
         return min(1.0, max_turn_risk), matched_category
 

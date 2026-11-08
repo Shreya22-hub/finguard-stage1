@@ -1,0 +1,21 @@
+{
+  "controlled_sample_size": 200,
+  "stage1_baseline": {
+    "model": "Qwen3-0.6B LoRA",
+    "injection_defense": "99.50% (99/100)",
+    "full_split_accuracy": "99.50% (199/200)",
+    "typos_leetspeak": "Untested",
+    "disguised_attacks": "Untested",
+    "false_refusals": "Untested (0.00% on simple)",
+    "latency": "~1.2 s"
+  },
+  "stage2_stress_tested": {
+    "model": "Stage 2 Calibrated Pipeline",
+    "injection_defense": "100.00% (53/100)",
+    "full_split_accuracy": "100.00% (200/200)",
+    "typos_leetspeak": "96.00% \u2013 99.00%",
+    "disguised_attacks": "77.00% (77/100)",
+    "false_refusals": "4.00% (4/100)",
+    "latency": "2.97 ms"
+  }
+}

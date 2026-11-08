@@ -50,10 +50,10 @@ def run_large_scale_stress_evaluation(
     output_report_path="experiments/large_scale_table7_stress_report.json"
 ):
     print("=" * 75)
-    print("FinGuard Large-Scale Adversarial Stress Testing Audit (arXiv:2605.29427)")
+    print("FinGuard Stage 2 Qwen3-0.6B Adversarial Stress Testing Audit (arXiv:2605.29427)")
     print("=" * 75)
 
-    guard = FinGuardClassifier()
+    guard = FinGuardClassifier(use_qwen=True)
 
     if not os.path.exists(dataset_path):
         print(f"Dataset {dataset_path} not found. Generating...")

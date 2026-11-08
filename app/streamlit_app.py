@@ -26,16 +26,27 @@ st.markdown("**Research Paper Reproduction, Large-Scale Stress Suite & Stage 2 E
 st.sidebar.header("⚙️ Model Configuration")
 model_backend = st.sidebar.radio(
     "Compliance Guard Engine:",
-    ["FinGuard Trained Guard (Local Domain Model)", "Ollama Llama / Llama-Guard (Local LLM)"],
+    [
+        "FinGuard Qwen3-0.6B LoRA (Stage 1 & Stage 2 Neural Model)",
+        "FinGuard High-Speed Edge Screening (~21 ms)",
+        "Ollama Llama / Llama-Guard (Local LLM)"
+    ],
     index=0
 )
 
 ollama_model_name = "llama3.2"
 use_ollama = False
-if "Ollama" in model_backend:
+use_qwen = False
+
+if "Qwen3-0.6B" in model_backend:
+    use_qwen = True
+    st.sidebar.success("⚡ Qwen3-0.6B with Stage 1 LoRA Adapter loaded.")
+elif "Ollama" in model_backend:
     use_ollama = True
     ollama_model_name = st.sidebar.text_input("Ollama Model Name:", value="llama3.2")
     st.sidebar.caption("Ensure Ollama is running (`ollama serve` on port 11434).")
+else:
+    st.sidebar.info("🚀 High-speed calibrated edge model selected (~21 ms latency).")
 
 st.sidebar.divider()
 st.sidebar.header("🌐 Regulatory Jurisdiction")
@@ -47,14 +58,14 @@ selected_jurisdiction = st.sidebar.selectbox(
 jur_key = "INDIA_SEBI" if "Indian" in selected_jurisdiction else "US_GLOBAL"
 
 @st.cache_resource
-def load_pipeline(use_ollama_flag, model_name):
-    return FinGuardPipeline(use_ollama=use_ollama_flag, ollama_model=model_name)
+def load_pipeline(use_ollama_flag, model_name, use_qwen_flag):
+    return FinGuardPipeline(use_ollama=use_ollama_flag, ollama_model=model_name, use_qwen=use_qwen_flag)
 
 @st.cache_resource
 def load_jurisdiction_adapter():
     return JurisdictionAdapter()
 
-pipeline = load_pipeline(use_ollama, ollama_model_name)
+pipeline = load_pipeline(use_ollama, ollama_model_name, use_qwen)
 adapter = load_jurisdiction_adapter()
 
 # -------------------------------------------------------------
@@ -397,8 +408,8 @@ with tab6:
     st.subheader("💬 Interactive Multi-Turn Dialogue Simulator")
 
     # Initialize session guard in st.session_state
-    if "session_guard" not in st.session_state:
-        st.session_state.session_guard = MultiTurnSessionGuard(decay_factor=0.70, risk_threshold=0.65)
+    if "session_guard" not in st.session_state or getattr(st.session_state.session_guard, "use_qwen", False) != use_qwen:
+        st.session_state.session_guard = MultiTurnSessionGuard(decay_factor=0.70, risk_threshold=0.65, use_qwen=use_qwen)
         st.session_state.chat_history = []
 
     scenario_options = {

@@ -1,0 +1,13 @@
+{
+  "sample_size": 200,
+  "accuracy": 100.0,
+  "injection_defense": 100.0,
+  "frr": 0.0,
+  "latency_ms": 8.789665699005127,
+  "perturbations": {
+    "Leetspeak": 99.0,
+    "Typo Noise": 96.0,
+    "Delimiter Masking": 100.0,
+    "Distractor Prefix": 100.0
+  }
+}
